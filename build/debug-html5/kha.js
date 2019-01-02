@@ -131,7 +131,7 @@ Main.ready = function() {
 	}
 	var cd = { name : "MyCamera", near_plane : 0.1, far_plane : 100.0, fov : 0.85};
 	Main.raw.camera_datas.push(cd);
-	var sh = { name : "MyShader", contexts : [{ name : "mesh", vertex_shader : "mesh.vert", fragment_shader : "mesh.frag", compare_mode : "less", cull_mode : "clockwise", depth_write : true, constants : [{ name : "color", type : "vec3"},{ name : "WVP", type : "mat4", link : "_worldViewProjectionMatrix"},{ link : "_normalMatrix", name : "N", type : "mat3"},{ link : "_lightColor", name : "lightColor", type : "vec3"},{ link : "_lightDirection", name : "lightDir", type : "vec3"}], vertex_elements : [{ name : "pos", data : "short4norm"},{ name : "nor", data : "short4norm"}]}]};
+	var sh = { name : "MyShader", contexts : [{ name : "mesh", vertex_shader : "mesh.vert", fragment_shader : "mesh.frag", compare_mode : "less", cull_mode : "clockwise", depth_write : true, constants : [{ name : "color", type : "vec3"},{ name : "WVP", type : "mat4", link : "_worldViewProjectionMatrix"},{ name : "M", type : "mat4", link : "_modelMatrix"},{ link : "_normalMatrix", name : "N", type : "mat3"},{ link : "_lightColor", name : "lightColor", type : "vec3"},{ link : "_lightDirection", name : "lightDir", type : "vec3"},{ link : "_lightPosition", name : "lightPos", type : "vec3"},{ link : "_cameraPosition", name : "cameraPos", type : "vec3"}], texture_units : [{ name : "img"}], vertex_elements : [{ name : "pos", data : "short4norm"},{ name : "nor", data : "short4norm"},{ name : "tex", data : "short2norm"}]}]};
 	Main.raw.shader_datas.push(sh);
 	var this1 = new Float32Array(3);
 	var colL = this1;
@@ -143,9 +143,9 @@ Main.ready = function() {
 	var this2 = new Float32Array(3);
 	var col = this2;
 	col[0] = 1.0;
-	col[1] = 0.0;
-	col[2] = 0.0;
-	var md = { name : "MyMaterial", shader : "MyShader", contexts : [{ name : "mesh", bind_constants : [{ name : "color", vec3 : col}]}]};
+	col[1] = 0.5;
+	col[2] = 0.31;
+	var md = { name : "MyMaterial", shader : "MyShader", contexts : [{ name : "mesh", bind_constants : [{ name : "color", vec3 : col},{ name : "lightColor", vec3 : colL}], bind_textures : [{ name : "img", file : "woodDiff.png"}]}]};
 	Main.raw.material_datas.push(md);
 	iron_data_MaterialData.parse(Main.raw.name,md.name,function(res) {
 		Main.dataReady();
@@ -154,7 +154,7 @@ Main.ready = function() {
 Main.dataReady = function() {
 	var co = { name : "Camera", type : "camera_object", data_ref : "MyCamera", transform : null};
 	Main.raw.objects.push(co);
-	var o = { name : "Suzanne", type : "mesh_object", data_ref : "Suzanne.arm/Suzanne", material_refs : ["MyMaterial"], transform : null};
+	var o = { name : "Wood", type : "mesh_object", data_ref : "Wood.arm/Cube", material_refs : ["MyMaterial"], transform : null};
 	Main.raw.objects.push(o);
 	var this1 = new Float32Array(16);
 	var col = this1;
@@ -177,7 +177,7 @@ Main.dataReady = function() {
 	var lo = { name : "Light", "type" : "light_object", "data_ref" : "LightData", "transform" : { "values" : col}};
 	Main.raw.objects.push(lo);
 	iron_Scene.create(Main.raw,function(o1) {
-		haxe_Log.trace("Monkey ready",{ fileName : "Main.hx", lineNumber : 158, className : "Main", methodName : "dataReady"});
+		haxe_Log.trace("Monkey ready",{ fileName : "Main.hx", lineNumber : 184, className : "Main", methodName : "dataReady"});
 		Main.sceneReady();
 	});
 };
@@ -281,7 +281,7 @@ Main.sceneReady = function() {
 		}
 	}
 	t.buildMatrix();
-	var suzanne = iron_Scene.active.getChild("Suzanne");
+	var suzanne = iron_Scene.active.getChild("Wood");
 	iron_App.notifyOnUpdate(function() {
 		suzanne.transform.rotate(new iron_math_Vec4(0,0,1),0.02);
 	});
@@ -7819,6 +7819,207 @@ iron_math_Quat.prototype = {
 		return this.x + ", " + this.y + ", " + this.z + ", " + this.w;
 	}
 	,__class__: iron_math_Quat
+};
+var iron_math_Vec3 = function(x,y,z) {
+	if(z == null) {
+		z = 0.0;
+	}
+	if(y == null) {
+		y = 0.0;
+	}
+	if(x == null) {
+		x = 0.0;
+	}
+	this.x = x;
+	this.y = y;
+	this.z = z;
+};
+$hxClasses["iron.math.Vec3"] = iron_math_Vec3;
+iron_math_Vec3.__name__ = "iron.math.Vec3";
+iron_math_Vec3.distance = function(v1,v2) {
+	var vx = v1.x - v2.x;
+	var vy = v1.y - v2.y;
+	var vz = v1.z - v2.z;
+	return Math.sqrt(vx * vx + vy * vy + vz * vz);
+};
+iron_math_Vec3.distancef = function(v1x,v1y,v1z,v2x,v2y,v2z) {
+	var vx = v1x - v2x;
+	var vy = v1y - v2y;
+	var vz = v1z - v2z;
+	return Math.sqrt(vx * vx + vy * vy + vz * vz);
+};
+iron_math_Vec3.xAxis = function() {
+	return new iron_math_Vec3(1.0,0.0,0.0);
+};
+iron_math_Vec3.yAxis = function() {
+	return new iron_math_Vec3(0.0,1.0,0.0);
+};
+iron_math_Vec3.zAxis = function() {
+	return new iron_math_Vec3(0.0,0.0,1.0);
+};
+iron_math_Vec3.prototype = {
+	x: null
+	,y: null
+	,z: null
+	,cross: function(v) {
+		var ax = this.x;
+		var ay = this.y;
+		var az = this.z;
+		var vx = v.x;
+		var vy = v.y;
+		var vz = v.z;
+		this.x = ay * vz - az * vy;
+		this.y = az * vx - ax * vz;
+		this.z = ax * vy - ay * vx;
+		return this;
+	}
+	,crossvecs: function(a,b) {
+		var ax = a.x;
+		var ay = a.y;
+		var az = a.z;
+		var bx = b.x;
+		var by = b.y;
+		var bz = b.z;
+		this.x = ay * bz - az * by;
+		this.y = az * bx - ax * bz;
+		this.z = ax * by - ay * bx;
+		return this;
+	}
+	,set: function(x,y,z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		return this;
+	}
+	,add: function(v) {
+		this.x += v.x;
+		this.y += v.y;
+		this.z += v.z;
+		return this;
+	}
+	,addf: function(x,y,z) {
+		this.x += x;
+		this.y += y;
+		this.z += z;
+		return this;
+	}
+	,addvecs: function(a,b) {
+		this.x = a.x + b.x;
+		this.y = a.y + b.y;
+		this.z = a.z + b.z;
+		return this;
+	}
+	,subvecs: function(a,b) {
+		this.x = a.x - b.x;
+		this.y = a.y - b.y;
+		this.z = a.z - b.z;
+		return this;
+	}
+	,normalize: function() {
+		var n = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+		if(n > 0.0) {
+			var invN = 1.0 / n;
+			this.x *= invN;
+			this.y *= invN;
+			this.z *= invN;
+		}
+		return this;
+	}
+	,mult: function(f) {
+		this.x *= f;
+		this.y *= f;
+		this.z *= f;
+		return this;
+	}
+	,dot: function(v) {
+		return this.x * v.x + this.y * v.y + this.z * v.z;
+	}
+	,setFrom: function(v) {
+		this.x = v.x;
+		this.y = v.y;
+		this.z = v.z;
+		return this;
+	}
+	,clone: function() {
+		return new iron_math_Vec3(this.x,this.y,this.z);
+	}
+	,lerp: function(from,to,s) {
+		this.x = from.x + (to.x - from.x) * s;
+		this.y = from.y + (to.y - from.y) * s;
+		this.z = from.z + (to.z - from.z) * s;
+		return this;
+	}
+	,applyproj: function(m) {
+		var x = this.x;
+		var y = this.y;
+		var z = this.z;
+		var d = 1.0 / (m.self._03 * x + m.self._13 * y + m.self._23 * z + m.self._33);
+		this.x = (m.self._00 * x + m.self._10 * y + m.self._20 * z + m.self._30) * d;
+		this.y = (m.self._01 * x + m.self._11 * y + m.self._21 * z + m.self._31) * d;
+		this.z = (m.self._02 * x + m.self._12 * y + m.self._22 * z + m.self._32) * d;
+		return this;
+	}
+	,applymat: function(m) {
+		var x = this.x;
+		var y = this.y;
+		var z = this.z;
+		this.x = m.self._00 * x + m.self._10 * y + m.self._20 * z + m.self._30;
+		this.y = m.self._01 * x + m.self._11 * y + m.self._21 * z + m.self._31;
+		this.z = m.self._02 * x + m.self._12 * y + m.self._22 * z + m.self._32;
+		return this;
+	}
+	,equals: function(v) {
+		if(this.x == v.x && this.y == v.y) {
+			return this.z == v.z;
+		} else {
+			return false;
+		}
+	}
+	,length: function() {
+		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+	}
+	,sub: function(v) {
+		this.x -= v.x;
+		this.y -= v.y;
+		this.z -= v.z;
+		return this;
+	}
+	,distanceTo: function(p) {
+		return Math.sqrt((p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y) + (p.z - this.z) * (p.z - this.z));
+	}
+	,clamp: function(min,max) {
+		var l = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+		if(l < min) {
+			var n = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+			if(n > 0.0) {
+				var invN = 1.0 / n;
+				this.x *= invN;
+				this.y *= invN;
+				this.z *= invN;
+			}
+			var _this = this;
+			_this.x *= min;
+			_this.y *= min;
+			_this.z *= min;
+		} else if(l > max) {
+			var n1 = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+			if(n1 > 0.0) {
+				var invN1 = 1.0 / n1;
+				this.x *= invN1;
+				this.y *= invN1;
+				this.z *= invN1;
+			}
+			var _this1 = this;
+			_this1.x *= max;
+			_this1.y *= max;
+			_this1.z *= max;
+		}
+		return this;
+	}
+	,toString: function() {
+		return "(" + this.x + ", " + this.y + ", " + this.z + ")";
+	}
+	,__class__: iron_math_Vec3
 };
 var iron_object_Animation = function() {
 	this.markerEvents = null;
@@ -15717,13 +15918,63 @@ js_html__$ArrayBuffer_ArrayBufferCompat.sliceImpl = function(begin,end) {
 	return resultArray.buffer;
 };
 var kha__$Assets_ImageList = function() {
-	this.names = [];
+	this.names = ["img","woodDIff"];
+	this.woodDIffDescription = { name : "woodDIff", original_height : 500, original_width : 500, files : ["woodDIff.png"], type : "image"};
+	this.woodDIffName = "woodDIff";
+	this.woodDIff = null;
+	this.imgDescription = { name : "img", original_height : 777, original_width : 1382, files : ["img.jpg"], type : "image"};
+	this.imgName = "img";
+	this.img = null;
 };
 $hxClasses["kha._Assets.ImageList"] = kha__$Assets_ImageList;
 kha__$Assets_ImageList.__name__ = "kha._Assets.ImageList";
 kha__$Assets_ImageList.prototype = {
 	get: function(name) {
 		return Reflect.field(this,name);
+	}
+	,img: null
+	,imgName: null
+	,imgDescription: null
+	,imgLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 132, className : "kha._Assets.ImageList", methodName : "imgLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadImage("img",function(image) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 132, className : "kha._Assets.ImageList", methodName : "imgLoad"});
+	}
+	,imgUnload: function() {
+		this.img.unload();
+		this.img = null;
+	}
+	,woodDIff: null
+	,woodDIffName: null
+	,woodDIffDescription: null
+	,woodDIffLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 132, className : "kha._Assets.ImageList", methodName : "woodDIffLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadImage("woodDIff",function(image) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 132, className : "kha._Assets.ImageList", methodName : "woodDIffLoad"});
+	}
+	,woodDIffUnload: function() {
+		this.woodDIff.unload();
+		this.woodDIff = null;
 	}
 	,names: null
 	,__class__: kha__$Assets_ImageList
@@ -15741,16 +15992,290 @@ kha__$Assets_SoundList.prototype = {
 	,__class__: kha__$Assets_SoundList
 };
 var kha__$Assets_BlobList = function() {
-	this.names = ["Suzanne_arm"];
+	this.names = ["B_arm","Box_arm","Box1_arm","Monkey_arm","PB_arm","Plane_arm","Plane1_arm","Sphere_arm","Spheref_arm","Steapot_arm","Suzanne_arm","Teapot_arm","Teapoth_arm","Teapots_arm","Try_arm","Trya_arm","Wall_arm","Wood_arm","WoodB_arm"];
+	this.WoodB_armDescription = { name : "WoodB_arm", files : ["WoodB.arm"], type : "blob"};
+	this.WoodB_armName = "WoodB_arm";
+	this.WoodB_arm = null;
+	this.Wood_armDescription = { name : "Wood_arm", files : ["Wood.arm"], type : "blob"};
+	this.Wood_armName = "Wood_arm";
+	this.Wood_arm = null;
+	this.Wall_armDescription = { name : "Wall_arm", files : ["Wall.arm"], type : "blob"};
+	this.Wall_armName = "Wall_arm";
+	this.Wall_arm = null;
+	this.Trya_armDescription = { name : "Trya_arm", files : ["Trya.arm"], type : "blob"};
+	this.Trya_armName = "Trya_arm";
+	this.Trya_arm = null;
+	this.Try_armDescription = { name : "Try_arm", files : ["Try.arm"], type : "blob"};
+	this.Try_armName = "Try_arm";
+	this.Try_arm = null;
+	this.Teapots_armDescription = { name : "Teapots_arm", files : ["Teapots.arm"], type : "blob"};
+	this.Teapots_armName = "Teapots_arm";
+	this.Teapots_arm = null;
+	this.Teapoth_armDescription = { name : "Teapoth_arm", files : ["Teapoth.arm"], type : "blob"};
+	this.Teapoth_armName = "Teapoth_arm";
+	this.Teapoth_arm = null;
+	this.Teapot_armDescription = { name : "Teapot_arm", files : ["Teapot.arm"], type : "blob"};
+	this.Teapot_armName = "Teapot_arm";
+	this.Teapot_arm = null;
 	this.Suzanne_armDescription = { name : "Suzanne_arm", files : ["Suzanne.arm"], type : "blob"};
 	this.Suzanne_armName = "Suzanne_arm";
 	this.Suzanne_arm = null;
+	this.Steapot_armDescription = { name : "Steapot_arm", files : ["Steapot.arm"], type : "blob"};
+	this.Steapot_armName = "Steapot_arm";
+	this.Steapot_arm = null;
+	this.Spheref_armDescription = { name : "Spheref_arm", files : ["Spheref.arm"], type : "blob"};
+	this.Spheref_armName = "Spheref_arm";
+	this.Spheref_arm = null;
+	this.Sphere_armDescription = { name : "Sphere_arm", files : ["Sphere.arm"], type : "blob"};
+	this.Sphere_armName = "Sphere_arm";
+	this.Sphere_arm = null;
+	this.Plane1_armDescription = { name : "Plane1_arm", files : ["Plane1.arm"], type : "blob"};
+	this.Plane1_armName = "Plane1_arm";
+	this.Plane1_arm = null;
+	this.Plane_armDescription = { name : "Plane_arm", files : ["Plane.arm"], type : "blob"};
+	this.Plane_armName = "Plane_arm";
+	this.Plane_arm = null;
+	this.PB_armDescription = { name : "PB_arm", files : ["PB.arm"], type : "blob"};
+	this.PB_armName = "PB_arm";
+	this.PB_arm = null;
+	this.Monkey_armDescription = { name : "Monkey_arm", files : ["Monkey.arm"], type : "blob"};
+	this.Monkey_armName = "Monkey_arm";
+	this.Monkey_arm = null;
+	this.Box1_armDescription = { name : "Box1_arm", files : ["Box1.arm"], type : "blob"};
+	this.Box1_armName = "Box1_arm";
+	this.Box1_arm = null;
+	this.Box_armDescription = { name : "Box_arm", files : ["Box.arm"], type : "blob"};
+	this.Box_armName = "Box_arm";
+	this.Box_arm = null;
+	this.B_armDescription = { name : "B_arm", files : ["B.arm"], type : "blob"};
+	this.B_armName = "B_arm";
+	this.B_arm = null;
 };
 $hxClasses["kha._Assets.BlobList"] = kha__$Assets_BlobList;
 kha__$Assets_BlobList.__name__ = "kha._Assets.BlobList";
 kha__$Assets_BlobList.prototype = {
 	get: function(name) {
 		return Reflect.field(this,name);
+	}
+	,B_arm: null
+	,B_armName: null
+	,B_armDescription: null
+	,B_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "B_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("B_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "B_armLoad"});
+	}
+	,B_armUnload: function() {
+		this.B_arm.unload();
+		this.B_arm = null;
+	}
+	,Box_arm: null
+	,Box_armName: null
+	,Box_armDescription: null
+	,Box_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Box_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Box_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Box_armLoad"});
+	}
+	,Box_armUnload: function() {
+		this.Box_arm.unload();
+		this.Box_arm = null;
+	}
+	,Box1_arm: null
+	,Box1_armName: null
+	,Box1_armDescription: null
+	,Box1_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Box1_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Box1_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Box1_armLoad"});
+	}
+	,Box1_armUnload: function() {
+		this.Box1_arm.unload();
+		this.Box1_arm = null;
+	}
+	,Monkey_arm: null
+	,Monkey_armName: null
+	,Monkey_armDescription: null
+	,Monkey_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Monkey_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Monkey_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Monkey_armLoad"});
+	}
+	,Monkey_armUnload: function() {
+		this.Monkey_arm.unload();
+		this.Monkey_arm = null;
+	}
+	,PB_arm: null
+	,PB_armName: null
+	,PB_armDescription: null
+	,PB_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "PB_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("PB_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "PB_armLoad"});
+	}
+	,PB_armUnload: function() {
+		this.PB_arm.unload();
+		this.PB_arm = null;
+	}
+	,Plane_arm: null
+	,Plane_armName: null
+	,Plane_armDescription: null
+	,Plane_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Plane_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Plane_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Plane_armLoad"});
+	}
+	,Plane_armUnload: function() {
+		this.Plane_arm.unload();
+		this.Plane_arm = null;
+	}
+	,Plane1_arm: null
+	,Plane1_armName: null
+	,Plane1_armDescription: null
+	,Plane1_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Plane1_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Plane1_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Plane1_armLoad"});
+	}
+	,Plane1_armUnload: function() {
+		this.Plane1_arm.unload();
+		this.Plane1_arm = null;
+	}
+	,Sphere_arm: null
+	,Sphere_armName: null
+	,Sphere_armDescription: null
+	,Sphere_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Sphere_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Sphere_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Sphere_armLoad"});
+	}
+	,Sphere_armUnload: function() {
+		this.Sphere_arm.unload();
+		this.Sphere_arm = null;
+	}
+	,Spheref_arm: null
+	,Spheref_armName: null
+	,Spheref_armDescription: null
+	,Spheref_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Spheref_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Spheref_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Spheref_armLoad"});
+	}
+	,Spheref_armUnload: function() {
+		this.Spheref_arm.unload();
+		this.Spheref_arm = null;
+	}
+	,Steapot_arm: null
+	,Steapot_armName: null
+	,Steapot_armDescription: null
+	,Steapot_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Steapot_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Steapot_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Steapot_armLoad"});
+	}
+	,Steapot_armUnload: function() {
+		this.Steapot_arm.unload();
+		this.Steapot_arm = null;
 	}
 	,Suzanne_arm: null
 	,Suzanne_armName: null
@@ -15773,6 +16298,182 @@ kha__$Assets_BlobList.prototype = {
 	,Suzanne_armUnload: function() {
 		this.Suzanne_arm.unload();
 		this.Suzanne_arm = null;
+	}
+	,Teapot_arm: null
+	,Teapot_armName: null
+	,Teapot_armDescription: null
+	,Teapot_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Teapot_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Teapot_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Teapot_armLoad"});
+	}
+	,Teapot_armUnload: function() {
+		this.Teapot_arm.unload();
+		this.Teapot_arm = null;
+	}
+	,Teapoth_arm: null
+	,Teapoth_armName: null
+	,Teapoth_armDescription: null
+	,Teapoth_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Teapoth_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Teapoth_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Teapoth_armLoad"});
+	}
+	,Teapoth_armUnload: function() {
+		this.Teapoth_arm.unload();
+		this.Teapoth_arm = null;
+	}
+	,Teapots_arm: null
+	,Teapots_armName: null
+	,Teapots_armDescription: null
+	,Teapots_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Teapots_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Teapots_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Teapots_armLoad"});
+	}
+	,Teapots_armUnload: function() {
+		this.Teapots_arm.unload();
+		this.Teapots_arm = null;
+	}
+	,Try_arm: null
+	,Try_armName: null
+	,Try_armDescription: null
+	,Try_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Try_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Try_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Try_armLoad"});
+	}
+	,Try_armUnload: function() {
+		this.Try_arm.unload();
+		this.Try_arm = null;
+	}
+	,Trya_arm: null
+	,Trya_armName: null
+	,Trya_armDescription: null
+	,Trya_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Trya_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Trya_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Trya_armLoad"});
+	}
+	,Trya_armUnload: function() {
+		this.Trya_arm.unload();
+		this.Trya_arm = null;
+	}
+	,Wall_arm: null
+	,Wall_armName: null
+	,Wall_armDescription: null
+	,Wall_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Wall_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Wall_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Wall_armLoad"});
+	}
+	,Wall_armUnload: function() {
+		this.Wall_arm.unload();
+		this.Wall_arm = null;
+	}
+	,Wood_arm: null
+	,Wood_armName: null
+	,Wood_armDescription: null
+	,Wood_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Wood_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("Wood_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "Wood_armLoad"});
+	}
+	,Wood_armUnload: function() {
+		this.Wood_arm.unload();
+		this.Wood_arm = null;
+	}
+	,WoodB_arm: null
+	,WoodB_armName: null
+	,WoodB_armDescription: null
+	,WoodB_armLoad: function(done,failure) {
+		var tmp;
+		if(failure != null) {
+			tmp = failure;
+		} else {
+			var f = haxe_Log.trace;
+			var infos = { fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "WoodB_armLoad"};
+			tmp = function(v) {
+				f(v,infos);
+			};
+		}
+		kha_Assets.loadBlob("WoodB_arm",function(blob) {
+			done();
+		},tmp,{ fileName : "kha/internal/AssetsBuilder.hx", lineNumber : 140, className : "kha._Assets.BlobList", methodName : "WoodB_armLoad"});
+	}
+	,WoodB_armUnload: function() {
+		this.WoodB_arm.unload();
+		this.WoodB_arm = null;
 	}
 	,names: null
 	,__class__: kha__$Assets_BlobList
@@ -17741,21 +18442,21 @@ kha_Shaders.init = function() {
 	blobs3.push(kha_internal_BytesBlob.fromBytes(bytes7));
 	kha_Shaders.painter_colored_vert = new kha_graphics4_VertexShader(blobs3,["painter-colored.vert.essl","painter-colored-webgl2.vert.essl"]);
 	var blobs4 = [];
-	var data8 = Reflect.field(kha_Shaders,"painter_image_fragData" + 0);
+	var data8 = Reflect.field(kha_Shaders,"painter_image_vertData" + 0);
 	var bytes8 = haxe_Unserializer.run(data8);
 	blobs4.push(kha_internal_BytesBlob.fromBytes(bytes8));
-	var data9 = Reflect.field(kha_Shaders,"painter_image_fragData" + 1);
+	var data9 = Reflect.field(kha_Shaders,"painter_image_vertData" + 1);
 	var bytes9 = haxe_Unserializer.run(data9);
 	blobs4.push(kha_internal_BytesBlob.fromBytes(bytes9));
-	kha_Shaders.painter_image_frag = new kha_graphics4_FragmentShader(blobs4,["painter-image.frag.essl","painter-image-webgl2.frag.essl"]);
+	kha_Shaders.painter_image_vert = new kha_graphics4_VertexShader(blobs4,["painter-image.vert.essl","painter-image-webgl2.vert.essl"]);
 	var blobs5 = [];
-	var data10 = Reflect.field(kha_Shaders,"painter_image_vertData" + 0);
+	var data10 = Reflect.field(kha_Shaders,"painter_image_fragData" + 0);
 	var bytes10 = haxe_Unserializer.run(data10);
 	blobs5.push(kha_internal_BytesBlob.fromBytes(bytes10));
-	var data11 = Reflect.field(kha_Shaders,"painter_image_vertData" + 1);
+	var data11 = Reflect.field(kha_Shaders,"painter_image_fragData" + 1);
 	var bytes11 = haxe_Unserializer.run(data11);
 	blobs5.push(kha_internal_BytesBlob.fromBytes(bytes11));
-	kha_Shaders.painter_image_vert = new kha_graphics4_VertexShader(blobs5,["painter-image.vert.essl","painter-image-webgl2.vert.essl"]);
+	kha_Shaders.painter_image_frag = new kha_graphics4_FragmentShader(blobs5,["painter-image.frag.essl","painter-image-webgl2.frag.essl"]);
 	var blobs6 = [];
 	var data12 = Reflect.field(kha_Shaders,"painter_text_fragData" + 0);
 	var bytes12 = haxe_Unserializer.run(data12);
@@ -34909,18 +35610,18 @@ kha_Scheduler.timeWarpSaveTime = 10.0;
 kha_Scheduler.DIF_COUNT = 3;
 kha_Scheduler.maxframetime = 0.5;
 kha_Scheduler.startTime = 0;
-kha_Shaders.mesh_fragData0 = "s614:I3ZlcnNpb24gMTAwCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCB2ZWMzIGxpZ2h0RGlyOwp1bmlmb3JtIGhpZ2hwIHZlYzMgY29sb3I7CnVuaWZvcm0gaGlnaHAgdmVjMyBsaWdodENvbG9yOwoKdmFyeWluZyBoaWdocCB2ZWMzIHdub3JtYWw7Cgp2b2lkIG1haW4oKQp7CiAgICBoaWdocCB2ZWMzIG4gPSBub3JtYWxpemUod25vcm1hbCk7CiAgICBoaWdocCBmbG9hdCBkb3ROTCA9IG1heCgwLjAsIGRvdChuLCBsaWdodERpcikpOwogICAgaGlnaHAgdmVjMyBkaXJlY3QgPSAoY29sb3IgKiBtYXgoMC4wLCBkb3ROTCkpICogbGlnaHRDb2xvcjsKICAgIGhpZ2hwIHZlYzMgaW5kaXJlY3QgPSB2ZWMzKDAuNDAwMDAwMDA1OTYwNDY0NDc3NTM5MDYyNSk7CiAgICBnbF9GcmFnRGF0YVswXSA9IHZlYzQoZGlyZWN0ICsgaW5kaXJlY3QsIDEuMCk7Cn0KCg";
-kha_Shaders.mesh_fragData1 = "s639:I3ZlcnNpb24gMzAwIGVzCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCB2ZWMzIGxpZ2h0RGlyOwp1bmlmb3JtIGhpZ2hwIHZlYzMgY29sb3I7CnVuaWZvcm0gaGlnaHAgdmVjMyBsaWdodENvbG9yOwoKaW4gaGlnaHAgdmVjMyB3bm9ybWFsOwpvdXQgaGlnaHAgdmVjNCBmcmFnQ29sb3I7Cgp2b2lkIG1haW4oKQp7CiAgICBoaWdocCB2ZWMzIG4gPSBub3JtYWxpemUod25vcm1hbCk7CiAgICBoaWdocCBmbG9hdCBkb3ROTCA9IG1heCgwLjAsIGRvdChuLCBsaWdodERpcikpOwogICAgaGlnaHAgdmVjMyBkaXJlY3QgPSAoY29sb3IgKiBtYXgoMC4wLCBkb3ROTCkpICogbGlnaHRDb2xvcjsKICAgIGhpZ2hwIHZlYzMgaW5kaXJlY3QgPSB2ZWMzKDAuNDAwMDAwMDA1OTYwNDY0NDc3NTM5MDYyNSk7CiAgICBmcmFnQ29sb3IgPSB2ZWM0KGRpcmVjdCArIGluZGlyZWN0LCAxLjApOwp9Cgo";
-kha_Shaders.mesh_vertData0 = "s276:I3ZlcnNpb24gMTAwCgp1bmlmb3JtIG1hdDMgTjsKdW5pZm9ybSBtYXQ0IFdWUDsKCnZhcnlpbmcgdmVjMyB3bm9ybWFsOwphdHRyaWJ1dGUgdmVjMyBub3I7CmF0dHJpYnV0ZSB2ZWM0IHBvczsKCnZvaWQgbWFpbigpCnsKICAgIHdub3JtYWwgPSBub3JtYWxpemUoTiAqIG5vcik7CiAgICBnbF9Qb3NpdGlvbiA9IFdWUCAqIHZlYzQocG9zLnh5eiwgMS4wKTsKfQoK";
-kha_Shaders.mesh_vertData1 = "s256:I3ZlcnNpb24gMzAwIGVzCgp1bmlmb3JtIG1hdDMgTjsKdW5pZm9ybSBtYXQ0IFdWUDsKCm91dCB2ZWMzIHdub3JtYWw7CmluIHZlYzMgbm9yOwppbiB2ZWM0IHBvczsKCnZvaWQgbWFpbigpCnsKICAgIHdub3JtYWwgPSBub3JtYWxpemUoTiAqIG5vcik7CiAgICBnbF9Qb3NpdGlvbiA9IFdWUCAqIHZlYzQocG9zLnh5eiwgMS4wKTsKfQoK";
+kha_Shaders.mesh_fragData0 = "s508:I3ZlcnNpb24gMTAwCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCBzYW1wbGVyMkQgaW1hZ2U7CnVuaWZvcm0gaGlnaHAgdmVjMyBsaWdodENvbG9yOwp1bmlmb3JtIGhpZ2hwIHZlYzMgbGlnaHREaXI7CnVuaWZvcm0gaGlnaHAgdmVjMyBjYW1lcmFQb3M7Cgp2YXJ5aW5nIGhpZ2hwIHZlYzIgdGV4Y29vcmRzOwp2YXJ5aW5nIGhpZ2hwIHZlYzMgd25vcm1hbDsKdmFyeWluZyBoaWdocCB2ZWMzIEZyYWdQb3M7Cgp2b2lkIG1haW4oKQp7CiAgICBoaWdocCB2ZWM0IGNvbG9yID0gdGV4dHVyZTJEKGltYWdlLCB0ZXhjb29yZHMpOwogICAgZ2xfRnJhZ0RhdGFbMF0gPSB2ZWM0KGNvbG9yLnh5eiwgMS4wKTsKfQoK";
+kha_Shaders.mesh_fragData1 = "s518:I3ZlcnNpb24gMzAwIGVzCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCBzYW1wbGVyMkQgaW1hZ2U7CnVuaWZvcm0gaGlnaHAgdmVjMyBsaWdodENvbG9yOwp1bmlmb3JtIGhpZ2hwIHZlYzMgbGlnaHREaXI7CnVuaWZvcm0gaGlnaHAgdmVjMyBjYW1lcmFQb3M7CgppbiBoaWdocCB2ZWMyIHRleGNvb3JkczsKb3V0IGhpZ2hwIHZlYzQgZnJhZ0NvbG9yOwppbiBoaWdocCB2ZWMzIHdub3JtYWw7CmluIGhpZ2hwIHZlYzMgRnJhZ1BvczsKCnZvaWQgbWFpbigpCnsKICAgIGhpZ2hwIHZlYzQgY29sb3IgPSB0ZXh0dXJlKGltYWdlLCB0ZXhjb29yZHMpOwogICAgZnJhZ0NvbG9yID0gdmVjNChjb2xvci54eXosIDEuMCk7Cn0KCg";
+kha_Shaders.mesh_vertData0 = "s480:I3ZlcnNpb24gMTAwCgp1bmlmb3JtIG1hdDMgTjsKdW5pZm9ybSBtYXQ0IE07CnVuaWZvcm0gbWF0NCBXVlA7Cgp2YXJ5aW5nIHZlYzMgd25vcm1hbDsKYXR0cmlidXRlIHZlYzMgbm9yOwp2YXJ5aW5nIHZlYzIgdGV4Y29vcmRzOwphdHRyaWJ1dGUgdmVjMiB0ZXg7CnZhcnlpbmcgdmVjMyBGcmFnUG9zOwphdHRyaWJ1dGUgdmVjNCBwb3M7Cgp2b2lkIG1haW4oKQp7CiAgICB3bm9ybWFsID0gbm9ybWFsaXplKE4gKiBub3IpOwogICAgdGV4Y29vcmRzID0gdGV4OwogICAgRnJhZ1BvcyA9IHZlYzMoKE0gKiB2ZWM0KHBvcy54eXosIDEuMCkpLnh5eik7CiAgICBnbF9Qb3NpdGlvbiA9IFdWUCAqIHZlYzQocG9zLnh5eiwgMS4wKTsKfQoK";
+kha_Shaders.mesh_vertData1 = "s440:I3ZlcnNpb24gMzAwIGVzCgp1bmlmb3JtIG1hdDMgTjsKdW5pZm9ybSBtYXQ0IE07CnVuaWZvcm0gbWF0NCBXVlA7CgpvdXQgdmVjMyB3bm9ybWFsOwppbiB2ZWMzIG5vcjsKb3V0IHZlYzIgdGV4Y29vcmRzOwppbiB2ZWMyIHRleDsKb3V0IHZlYzMgRnJhZ1BvczsKaW4gdmVjNCBwb3M7Cgp2b2lkIG1haW4oKQp7CiAgICB3bm9ybWFsID0gbm9ybWFsaXplKE4gKiBub3IpOwogICAgdGV4Y29vcmRzID0gdGV4OwogICAgRnJhZ1BvcyA9IHZlYzMoKE0gKiB2ZWM0KHBvcy54eXosIDEuMCkpLnh5eik7CiAgICBnbF9Qb3NpdGlvbiA9IFdWUCAqIHZlYzQocG9zLnh5eiwgMS4wKTsKfQoK";
 kha_Shaders.painter_colored_fragData0 = "s198:I3ZlcnNpb24gMTAwCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdmFyeWluZyBoaWdocCB2ZWM0IGZyYWdtZW50Q29sb3I7Cgp2b2lkIG1haW4oKQp7CiAgICBnbF9GcmFnRGF0YVswXSA9IGZyYWdtZW50Q29sb3I7Cn0KCg";
 kha_Shaders.painter_colored_fragData1 = "s223:I3ZlcnNpb24gMzAwIGVzCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKb3V0IGhpZ2hwIHZlYzQgRnJhZ0NvbG9yOwppbiBoaWdocCB2ZWM0IGZyYWdtZW50Q29sb3I7Cgp2b2lkIG1haW4oKQp7CiAgICBGcmFnQ29sb3IgPSBmcmFnbWVudENvbG9yOwp9Cgo";
 kha_Shaders.painter_colored_vertData0 = "s331:I3ZlcnNpb24gMTAwCgp1bmlmb3JtIG1hdDQgcHJvamVjdGlvbk1hdHJpeDsKCmF0dHJpYnV0ZSB2ZWMzIHZlcnRleFBvc2l0aW9uOwp2YXJ5aW5nIHZlYzQgZnJhZ21lbnRDb2xvcjsKYXR0cmlidXRlIHZlYzQgdmVydGV4Q29sb3I7Cgp2b2lkIG1haW4oKQp7CiAgICBnbF9Qb3NpdGlvbiA9IHByb2plY3Rpb25NYXRyaXggKiB2ZWM0KHZlcnRleFBvc2l0aW9uLCAxLjApOwogICAgZnJhZ21lbnRDb2xvciA9IHZlcnRleENvbG9yOwp9Cgo";
 kha_Shaders.painter_colored_vertData1 = "s311:I3ZlcnNpb24gMzAwIGVzCgp1bmlmb3JtIG1hdDQgcHJvamVjdGlvbk1hdHJpeDsKCmluIHZlYzMgdmVydGV4UG9zaXRpb247Cm91dCB2ZWM0IGZyYWdtZW50Q29sb3I7CmluIHZlYzQgdmVydGV4Q29sb3I7Cgp2b2lkIG1haW4oKQp7CiAgICBnbF9Qb3NpdGlvbiA9IHByb2plY3Rpb25NYXRyaXggKiB2ZWM0KHZlcnRleFBvc2l0aW9uLCAxLjApOwogICAgZnJhZ21lbnRDb2xvciA9IHZlcnRleENvbG9yOwp9Cgo";
-kha_Shaders.painter_image_fragData0 = "s471:I3ZlcnNpb24gMTAwCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCBzYW1wbGVyMkQgdGV4OwoKdmFyeWluZyBoaWdocCB2ZWMyIHRleENvb3JkOwp2YXJ5aW5nIGhpZ2hwIHZlYzQgY29sb3I7Cgp2b2lkIG1haW4oKQp7CiAgICBoaWdocCB2ZWM0IHRleGNvbG9yID0gdGV4dHVyZTJEKHRleCwgdGV4Q29vcmQpICogY29sb3I7CiAgICBoaWdocCB2ZWMzIF8zMiA9IHRleGNvbG9yLnh5eiAqIGNvbG9yLnc7CiAgICB0ZXhjb2xvciA9IHZlYzQoXzMyLngsIF8zMi55LCBfMzIueiwgdGV4Y29sb3Iudyk7CiAgICBnbF9GcmFnRGF0YVswXSA9IHRleGNvbG9yOwp9Cgo";
-kha_Shaders.painter_image_fragData1 = "s487:I3ZlcnNpb24gMzAwIGVzCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCBzYW1wbGVyMkQgdGV4OwoKaW4gaGlnaHAgdmVjMiB0ZXhDb29yZDsKaW4gaGlnaHAgdmVjNCBjb2xvcjsKb3V0IGhpZ2hwIHZlYzQgRnJhZ0NvbG9yOwoKdm9pZCBtYWluKCkKewogICAgaGlnaHAgdmVjNCB0ZXhjb2xvciA9IHRleHR1cmUodGV4LCB0ZXhDb29yZCkgKiBjb2xvcjsKICAgIGhpZ2hwIHZlYzMgXzMyID0gdGV4Y29sb3IueHl6ICogY29sb3IudzsKICAgIHRleGNvbG9yID0gdmVjNChfMzIueCwgXzMyLnksIF8zMi56LCB0ZXhjb2xvci53KTsKICAgIEZyYWdDb2xvciA9IHRleGNvbG9yOwp9Cgo";
 kha_Shaders.painter_image_vertData0 = "s415:I3ZlcnNpb24gMTAwCgp1bmlmb3JtIG1hdDQgcHJvamVjdGlvbk1hdHJpeDsKCmF0dHJpYnV0ZSB2ZWMzIHZlcnRleFBvc2l0aW9uOwp2YXJ5aW5nIHZlYzIgdGV4Q29vcmQ7CmF0dHJpYnV0ZSB2ZWMyIHRleFBvc2l0aW9uOwp2YXJ5aW5nIHZlYzQgY29sb3I7CmF0dHJpYnV0ZSB2ZWM0IHZlcnRleENvbG9yOwoKdm9pZCBtYWluKCkKewogICAgZ2xfUG9zaXRpb24gPSBwcm9qZWN0aW9uTWF0cml4ICogdmVjNCh2ZXJ0ZXhQb3NpdGlvbiwgMS4wKTsKICAgIHRleENvb3JkID0gdGV4UG9zaXRpb247CiAgICBjb2xvciA9IHZlcnRleENvbG9yOwp9Cgo";
 kha_Shaders.painter_image_vertData1 = "s380:I3ZlcnNpb24gMzAwIGVzCgp1bmlmb3JtIG1hdDQgcHJvamVjdGlvbk1hdHJpeDsKCmluIHZlYzMgdmVydGV4UG9zaXRpb247Cm91dCB2ZWMyIHRleENvb3JkOwppbiB2ZWMyIHRleFBvc2l0aW9uOwpvdXQgdmVjNCBjb2xvcjsKaW4gdmVjNCB2ZXJ0ZXhDb2xvcjsKCnZvaWQgbWFpbigpCnsKICAgIGdsX1Bvc2l0aW9uID0gcHJvamVjdGlvbk1hdHJpeCAqIHZlYzQodmVydGV4UG9zaXRpb24sIDEuMCk7CiAgICB0ZXhDb29yZCA9IHRleFBvc2l0aW9uOwogICAgY29sb3IgPSB2ZXJ0ZXhDb2xvcjsKfQoK";
+kha_Shaders.painter_image_fragData0 = "s471:I3ZlcnNpb24gMTAwCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCBzYW1wbGVyMkQgdGV4OwoKdmFyeWluZyBoaWdocCB2ZWMyIHRleENvb3JkOwp2YXJ5aW5nIGhpZ2hwIHZlYzQgY29sb3I7Cgp2b2lkIG1haW4oKQp7CiAgICBoaWdocCB2ZWM0IHRleGNvbG9yID0gdGV4dHVyZTJEKHRleCwgdGV4Q29vcmQpICogY29sb3I7CiAgICBoaWdocCB2ZWMzIF8zMiA9IHRleGNvbG9yLnh5eiAqIGNvbG9yLnc7CiAgICB0ZXhjb2xvciA9IHZlYzQoXzMyLngsIF8zMi55LCBfMzIueiwgdGV4Y29sb3Iudyk7CiAgICBnbF9GcmFnRGF0YVswXSA9IHRleGNvbG9yOwp9Cgo";
+kha_Shaders.painter_image_fragData1 = "s487:I3ZlcnNpb24gMzAwIGVzCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCBzYW1wbGVyMkQgdGV4OwoKaW4gaGlnaHAgdmVjMiB0ZXhDb29yZDsKaW4gaGlnaHAgdmVjNCBjb2xvcjsKb3V0IGhpZ2hwIHZlYzQgRnJhZ0NvbG9yOwoKdm9pZCBtYWluKCkKewogICAgaGlnaHAgdmVjNCB0ZXhjb2xvciA9IHRleHR1cmUodGV4LCB0ZXhDb29yZCkgKiBjb2xvcjsKICAgIGhpZ2hwIHZlYzMgXzMyID0gdGV4Y29sb3IueHl6ICogY29sb3IudzsKICAgIHRleGNvbG9yID0gdmVjNChfMzIueCwgXzMyLnksIF8zMi56LCB0ZXhjb2xvci53KTsKICAgIEZyYWdDb2xvciA9IHRleGNvbG9yOwp9Cgo";
 kha_Shaders.painter_text_fragData0 = "s351:I3ZlcnNpb24gMTAwCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCBzYW1wbGVyMkQgdGV4OwoKdmFyeWluZyBoaWdocCB2ZWM0IGZyYWdtZW50Q29sb3I7CnZhcnlpbmcgaGlnaHAgdmVjMiB0ZXhDb29yZDsKCnZvaWQgbWFpbigpCnsKICAgIGdsX0ZyYWdEYXRhWzBdID0gdmVjNChmcmFnbWVudENvbG9yLnh5eiwgdGV4dHVyZTJEKHRleCwgdGV4Q29vcmQpLnggKiBmcmFnbWVudENvbG9yLncpOwp9Cgo";
 kha_Shaders.painter_text_fragData1 = "s367:I3ZlcnNpb24gMzAwIGVzCnByZWNpc2lvbiBtZWRpdW1wIGZsb2F0OwpwcmVjaXNpb24gaGlnaHAgaW50OwoKdW5pZm9ybSBoaWdocCBzYW1wbGVyMkQgdGV4OwoKb3V0IGhpZ2hwIHZlYzQgRnJhZ0NvbG9yOwppbiBoaWdocCB2ZWM0IGZyYWdtZW50Q29sb3I7CmluIGhpZ2hwIHZlYzIgdGV4Q29vcmQ7Cgp2b2lkIG1haW4oKQp7CiAgICBGcmFnQ29sb3IgPSB2ZWM0KGZyYWdtZW50Q29sb3IueHl6LCB0ZXh0dXJlKHRleCwgdGV4Q29vcmQpLnggKiBmcmFnbWVudENvbG9yLncpOwp9Cgo";
 kha_Shaders.painter_text_vertData0 = "s436:I3ZlcnNpb24gMTAwCgp1bmlmb3JtIG1hdDQgcHJvamVjdGlvbk1hdHJpeDsKCmF0dHJpYnV0ZSB2ZWMzIHZlcnRleFBvc2l0aW9uOwp2YXJ5aW5nIHZlYzIgdGV4Q29vcmQ7CmF0dHJpYnV0ZSB2ZWMyIHRleFBvc2l0aW9uOwp2YXJ5aW5nIHZlYzQgZnJhZ21lbnRDb2xvcjsKYXR0cmlidXRlIHZlYzQgdmVydGV4Q29sb3I7Cgp2b2lkIG1haW4oKQp7CiAgICBnbF9Qb3NpdGlvbiA9IHByb2plY3Rpb25NYXRyaXggKiB2ZWM0KHZlcnRleFBvc2l0aW9uLCAxLjApOwogICAgdGV4Q29vcmQgPSB0ZXhQb3NpdGlvbjsKICAgIGZyYWdtZW50Q29sb3IgPSB2ZXJ0ZXhDb2xvcjsKfQoK";

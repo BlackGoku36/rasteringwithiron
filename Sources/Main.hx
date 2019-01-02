@@ -1,5 +1,8 @@
 package;
 
+import iron.math.Vec3;
+import haxe.ds.Vector;
+import iron.data.MaterialData.MaterialContext;
 import iron.App;
 import iron.Scene;
 import iron.RenderPath;
@@ -7,10 +10,13 @@ import iron.data.*;
 import iron.data.SceneFormat;
 import iron.object.Object;
 import iron.math.Vec4;
+import kha.Image;
 
 class Main {
 
 	static var raw:TSceneFormat;
+
+	public static var textureImg:Image = null;
 
 	public static function main() {
 		kha.System.start({title: "Empty", width: 1280, height: 720}, function(window:kha.Window) {
@@ -60,6 +66,7 @@ class Main {
 					constants: [
 						{ name: "color", type: "vec3" },
 						{ name: "WVP", type: "mat4", link: "_worldViewProjectionMatrix" },
+						{ name: "M", type: "mat4", link: "_modelMatrix" },
 						{ link: "_normalMatrix", name: "N", type: "mat3"},
 						{
                             link: "_lightColor",
@@ -70,11 +77,25 @@ class Main {
                             link: "_lightDirection",
                             name: "lightDir",
                             type: "vec3"
-                        }
+                        },
+						{
+							link: "_lightPosition",
+                            name: "lightPos",
+                            type: "vec3"
+						},
+						{
+							link: "_cameraPosition",
+							name: "cameraPos",
+							type: "vec3"
+						}
+					],
+					texture_units: [
+						{name: "img"}
 					],
 					vertex_elements: [
 						{ name: "pos", data: "short4norm" },
-						{ name: "nor",data: "short4norm"}
+						{ name: "nor",data: "short2norm"},
+						{name: "tex", data: "short2norm"}
 					]
 				}
 			]
@@ -96,7 +117,7 @@ class Main {
 		raw.light_datas.push(ls);
 
 		var col = new kha.arrays.Float32Array(3);
-		col[0] = 1.0; col[1] = 0.0; col[2] = 0.0;
+		col[0] = 1.0; col[1] = 0.5; col[2] = 0.31;
 
 		var md:TMaterialData = {
 			name: "MyMaterial",
@@ -105,7 +126,12 @@ class Main {
 				{
 					name: "mesh",
 					bind_constants: [
-						{ name: "color", vec3: col }
+						{ name: "color", vec3: col },
+						{name: "lightColor", vec3: colL}
+						//{name: "cameraPos", vec3: cameraLoc}
+					],
+					bind_textures: [
+						{name: "img", file: "woodDiff.png"}
 					]
 				}
 			]
@@ -129,11 +155,11 @@ class Main {
 
 		// Mesh object
 		var o:TObj = {
-			name: "Suzanne",
+			name: "Wood",
 			type: "mesh_object",
-			data_ref: "Suzanne.arm/Suzanne",
+			data_ref: "Wood.arm/Cube",
 			material_refs: ["MyMaterial"],
-			transform: null
+			transform: null,
 		};
 		raw.objects.push(o);
 
@@ -173,7 +199,7 @@ class Main {
 		t.buildMatrix();
 			
 		// Rotate suzanne
-		var suzanne = Scene.active.getChild("Suzanne");
+		var suzanne = Scene.active.getChild("Wood");
 		App.notifyOnUpdate(function() {
 			suzanne.transform.rotate(new Vec4(0, 0, 1), 0.02);
 		});

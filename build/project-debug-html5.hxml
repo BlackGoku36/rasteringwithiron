@@ -1,8 +1,8 @@
 -cp C:\Users\KHIDIR SUTHAR\Downloads\blender-2.80-4c5e76025d83-win64\blender-2.8\armsdk\Kha\Sources
 -cp C:\Users\KHIDIR SUTHAR\Downloads\blender-2.80-4c5e76025d83-win64\blender-2.8\armsdk\Kha\Backends\HTML5
--cp c:\Users\KHIDIR SUTHAR\Desktop\iron_examples\mesh\Sources
--cp c:\Users\KHIDIR SUTHAR\Desktop\iron_examples\iron\Sources
--cp c:\Users\KHIDIR SUTHAR\Desktop\iron_examples\iron
+-cp c:\Users\KHIDIR SUTHAR\rasteringwithiron\Sources
+-cp c:\Users\KHIDIR SUTHAR\iron\Sources
+-cp c:\Users\KHIDIR SUTHAR\iron
 -D ../../iron
 -D sys_g1
 -D sys_g2

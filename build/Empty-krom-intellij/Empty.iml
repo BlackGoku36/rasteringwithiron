@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="HAXE_MODULE" version="4">
+  <component name="HaxeModuleSettingsStorage">
+    <option name="arguments" value="" />
+    <option name="buildConfig" value="1" />
+    <option name="excludeFromCompilation" value="true" />
+    <option name="flexSdkName" value="flex_sdk_4.6" />
+    <option name="haxeTarget" value="JavaScript" />
+    <option name="hxmlPath" value="$MODULE_DIR$/../Empty-krom.hxml" />
+    <option name="mainClass" value="Main" />
+    <option name="outputFileName" value="kha.swf" />
+    <option name="outputFolder" value="$MODULE_DIR$/../krom" />
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/../krom" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../..">
+      <sourceFolder url="file://C:\Users\KHIDIR SUTHAR\Downloads\blender-2.80-4c5e76025d83-win64\blender-2.8\armsdk\Kha\Sources" isTestSource="false" />
+      <sourceFolder url="file://C:\Users\KHIDIR SUTHAR\Downloads\blender-2.80-4c5e76025d83-win64\blender-2.8\armsdk\Kha\Backends\Krom" isTestSource="false" />
+      <sourceFolder url="file://c:\Users\KHIDIR SUTHAR\rasteringwithiron\Sources" isTestSource="false" />
+      <sourceFolder url="file://c:\Users\KHIDIR SUTHAR\iron\Sources" isTestSource="false" />
+
+    </content>
+    <content url="file://Libraries/../../iron">
+      <sourceFolder url="file://c:\Users\KHIDIR SUTHAR\iron" isTestSource="false" />
+    </content>
+    
+    <orderEntry type="jdk" jdkName="Haxe 3.2.0" jdkType="Haxe toolkit" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

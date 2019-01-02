@@ -1,11 +1,155 @@
 {
 	"files": [
 		{
+			"name": "B_arm",
+			"files": [
+				"B.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Box_arm",
+			"files": [
+				"Box.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Box1_arm",
+			"files": [
+				"Box1.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Monkey_arm",
+			"files": [
+				"Monkey.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "PB_arm",
+			"files": [
+				"PB.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Plane_arm",
+			"files": [
+				"Plane.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Plane1_arm",
+			"files": [
+				"Plane1.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Sphere_arm",
+			"files": [
+				"Sphere.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Spheref_arm",
+			"files": [
+				"Spheref.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Steapot_arm",
+			"files": [
+				"Steapot.arm"
+			],
+			"type": "blob"
+		},
+		{
 			"name": "Suzanne_arm",
 			"files": [
 				"Suzanne.arm"
 			],
 			"type": "blob"
+		},
+		{
+			"name": "Teapot_arm",
+			"files": [
+				"Teapot.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Teapoth_arm",
+			"files": [
+				"Teapoth.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Teapots_arm",
+			"files": [
+				"Teapots.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Try_arm",
+			"files": [
+				"Try.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Trya_arm",
+			"files": [
+				"Trya.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Wall_arm",
+			"files": [
+				"Wall.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "Wood_arm",
+			"files": [
+				"Wood.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "WoodB_arm",
+			"files": [
+				"WoodB.arm"
+			],
+			"type": "blob"
+		},
+		{
+			"name": "img",
+			"files": [
+				"img.jpg"
+			],
+			"type": "image",
+			"original_width": 1382,
+			"original_height": 777
+		},
+		{
+			"name": "woodDIff",
+			"files": [
+				"woodDIff.png"
+			],
+			"type": "image",
+			"original_width": 500,
+			"original_height": 500
 		},
 		{
 			"name": "mesh_frag",
@@ -16,7 +160,15 @@
 			"type": "shader",
 			"inputs": [
 				{
+					"name": "texcoords",
+					"type": "vec2"
+				},
+				{
 					"name": "wnormal",
+					"type": "vec3"
+				},
+				{
+					"name": "FragPos",
 					"type": "vec3"
 				}
 			],
@@ -28,15 +180,19 @@
 			],
 			"uniforms": [
 				{
+					"name": "image",
+					"type": "sampler2D"
+				},
+				{
+					"name": "lightColor",
+					"type": "vec3"
+				},
+				{
 					"name": "lightDir",
 					"type": "vec3"
 				},
 				{
-					"name": "color",
-					"type": "vec3"
-				},
-				{
-					"name": "lightColor",
+					"name": "cameraPos",
 					"type": "vec3"
 				}
 			],
@@ -55,6 +211,10 @@
 					"type": "vec3"
 				},
 				{
+					"name": "tex",
+					"type": "vec2"
+				},
+				{
 					"name": "pos",
 					"type": "vec4"
 				},
@@ -71,12 +231,24 @@
 				{
 					"name": "wnormal",
 					"type": "vec3"
+				},
+				{
+					"name": "texcoords",
+					"type": "vec2"
+				},
+				{
+					"name": "FragPos",
+					"type": "vec3"
 				}
 			],
 			"uniforms": [
 				{
 					"name": "N",
 					"type": "mat3"
+				},
+				{
+					"name": "M",
+					"type": "mat4"
 				},
 				{
 					"name": "WVP",
@@ -191,37 +363,6 @@
 			]
 		},
 		{
-			"name": "painter_image_frag",
-			"files": [
-				"painter-image.frag.essl",
-				"painter-image-webgl2.frag.essl"
-			],
-			"type": "shader",
-			"inputs": [
-				{
-					"name": "texCoord",
-					"type": "vec2"
-				},
-				{
-					"name": "color",
-					"type": "vec4"
-				}
-			],
-			"outputs": [
-				{
-					"name": "FragColor",
-					"type": "vec4"
-				}
-			],
-			"uniforms": [
-				{
-					"name": "tex",
-					"type": "sampler2D"
-				}
-			],
-			"types": []
-		},
-		{
 			"name": "painter_image_vert",
 			"files": [
 				"painter-image.vert.essl",
@@ -289,6 +430,37 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "painter_image_frag",
+			"files": [
+				"painter-image.frag.essl",
+				"painter-image-webgl2.frag.essl"
+			],
+			"type": "shader",
+			"inputs": [
+				{
+					"name": "texCoord",
+					"type": "vec2"
+				},
+				{
+					"name": "color",
+					"type": "vec4"
+				}
+			],
+			"outputs": [
+				{
+					"name": "FragColor",
+					"type": "vec4"
+				}
+			],
+			"uniforms": [
+				{
+					"name": "tex",
+					"type": "sampler2D"
+				}
+			],
+			"types": []
 		},
 		{
 			"name": "painter_text_frag",

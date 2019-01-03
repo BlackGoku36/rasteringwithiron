@@ -59,7 +59,7 @@ class Main {
 				{
 					name: "mesh",
 					vertex_shader: "mesh.vert",
-					fragment_shader: "mesh.frag",
+					fragment_shader: "tex.frag",
 					compare_mode: "less",
 					cull_mode: "clockwise",
 					depth_write: true,
@@ -155,9 +155,9 @@ class Main {
 
 		// Mesh object
 		var o:TObj = {
-			name: "Wood",
+			name: "Trya",
 			type: "mesh_object",
-			data_ref: "Wood.arm/Cube",
+			data_ref: "Trya.arm/Icosphere",
 			material_refs: ["MyMaterial"],
 			transform: null,
 		};
@@ -199,7 +199,7 @@ class Main {
 		t.buildMatrix();
 			
 		// Rotate suzanne
-		var suzanne = Scene.active.getChild("Wood");
+		var suzanne = Scene.active.getChild("Trya");
 		App.notifyOnUpdate(function() {
 			suzanne.transform.rotate(new Vec4(0, 0, 1), 0.02);
 		});

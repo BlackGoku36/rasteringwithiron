@@ -107,7 +107,7 @@ class Main {
 
 		var ls:TLightData = {
             "name": "LightData",
-            "type": "sun",
+            "type": "point",
             "color": colL,
             "strength": 1.0,
             "near_plane": 0.1,

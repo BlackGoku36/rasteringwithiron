@@ -1,0 +1,21 @@
+#version 300 es
+precision mediump float;
+precision highp int;
+
+uniform highp vec3 lightDir;
+uniform highp vec3 color;
+uniform highp vec3 lightColor;
+uniform highp sampler2D image;
+
+in highp vec3 wnormal;
+out highp vec4 fragColor;
+
+void main()
+{
+    highp vec3 n = normalize(wnormal);
+    highp float dotNL = max(0.0, dot(n, lightDir));
+    highp vec3 direct = (color * max(0.0, dotNL)) * lightColor;
+    highp vec3 indirect = vec3(0.100000001490116119384765625);
+    fragColor = vec4(direct + indirect, 1.0);
+}
+

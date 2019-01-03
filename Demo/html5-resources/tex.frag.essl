@@ -1,0 +1,21 @@
+#version 100
+precision mediump float;
+precision highp int;
+
+uniform highp sampler2D image;
+uniform highp vec3 lightDir;
+uniform highp vec3 lightColor;
+
+varying highp vec2 texcoords;
+varying highp vec3 wnormal;
+
+void main()
+{
+    highp vec4 color = texture2D(image, texcoords);
+    highp vec3 n = normalize(wnormal);
+    highp float dotNL = max(0.0, dot(n, lightDir));
+    highp vec3 direct = (color.xyz * max(0.0, dotNL)) * lightColor;
+    highp vec3 indirect = vec3(0.100000001490116119384765625);
+    gl_FragData[0] = vec4(direct + indirect, 1.0);
+}
+

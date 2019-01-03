@@ -15,7 +15,7 @@ void main() {
 
 	float dotNL = max(0.0, dot(n, lightDir));
 	vec3 direct = color * max(0.0, dotNL) * lightColor;
-	vec3 indirect = vec3(0.1, 0.1, 0.1);
+	vec3 indirect = vec3(0.1, 0.1, 0.1)*color;
  
 
 	fragColor = vec4(direct + indirect, 1.0);

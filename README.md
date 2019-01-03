@@ -16,5 +16,3 @@ Feel free to open Issue and Make PR
 
 [Browser](https://blackgoku36.github.io/rasteringwithiron/Demo/html5/index.html)(doesn't work for some reason)
 
-
-[Browser](https://blackgoku36.github.io/rasteringwithiron/Demo/html5/index.html)(doesn't work for some reason)

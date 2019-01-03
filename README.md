@@ -5,4 +5,6 @@ Basic rasterizer written in Haxe with help of Iron Library
 Feel free to open Issue and Make PR
 
 ## Demo
-[Demo](Demo/html5/index.html)
+[Plain Color](Demo/Assets/PlainColor.mp4)
+
+[Texture](Demo/Assets/Texture.mp4)

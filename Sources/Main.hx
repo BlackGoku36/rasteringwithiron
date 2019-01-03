@@ -59,7 +59,7 @@ class Main {
 				{
 					name: "mesh",
 					vertex_shader: "mesh.vert",
-					fragment_shader: "tex.frag",
+					fragment_shader: "color.frag",
 					compare_mode: "less",
 					cull_mode: "clockwise",
 					depth_write: true,
@@ -131,7 +131,7 @@ class Main {
 						//{name: "cameraPos", vec3: cameraLoc}
 					],
 					bind_textures: [
-						{name: "img", file: "woodDiff.png"}
+						{name: "img", file: "img.jpg"}
 					]
 				}
 			]

@@ -58,8 +58,8 @@ class Main {
 			contexts: [
 				{
 					name: "mesh",
-					vertex_shader: "mesh.vert",
-					fragment_shader: "tex.frag",
+					vertex_shader: "pbr.vert",
+					fragment_shader: "pbr.frag",
 					compare_mode: "less",
 					cull_mode: "clockwise",
 					depth_write: true,
@@ -67,7 +67,10 @@ class Main {
 						{ name: "color", type: "vec3" },
 						{ name: "WVP", type: "mat4", link: "_worldViewProjectionMatrix" },
 						{ name: "M", type: "mat4", link: "_modelMatrix" },
-						{ link: "_normalMatrix", name: "N", type: "mat3"},
+						{name: "W", type: "mat4", link: "_worldMatrix"},
+						{ name: "P", type: "mat4", link: "_projectionMatrix" },
+						{ name: "V", type: "mat4", link: "_viewMatrix" },
+						{ name: "N", type: "mat3", link: "_normalMatrix"},
 						{
                             link: "_lightColor",
                             name: "lightColor",
@@ -90,7 +93,11 @@ class Main {
 						}
 					],
 					texture_units: [
-						{name: "img"}
+						{name: "albedoMap"},
+						{name: "normalMap"},
+						{name: "metallicMap"},
+						{name: "roughnessMap"},
+						{name: "aoMap"}
 					],
 					vertex_elements: [
 						{ name: "pos", data: "short4norm" },
@@ -128,10 +135,14 @@ class Main {
 					bind_constants: [
 						{ name: "color", vec3: col },
 						{name: "lightColor", vec3: colL}
-						//{name: "cameraPos", vec3: cameraLoc}
+						//{name: "cameraPos", vec3: caLoc}
 					],
 					bind_textures: [
-						{name: "img", file: "woodDiff.png"}
+						{name: "albedoMap", file: "rustedironDiffuse.png"},
+						{name: "normalMap", file: "rustedironNormal.png"},
+						{name: "metallicMap", file: "rustedironMetalness.png"},
+						{name: "roughnessMap", file: "rustedironRoughness.png"},
+						{name: "aoMap", file: "rustedironAO.png"}
 					]
 				}
 			]
@@ -155,9 +166,9 @@ class Main {
 
 		// Mesh object
 		var o:TObj = {
-			name: "Trya",
+			name: "SSphere",
 			type: "mesh_object",
-			data_ref: "Trya.arm/Icosphere",
+			data_ref: "SSphere.arm/Sphere",
 			material_refs: ["MyMaterial"],
 			transform: null,
 		};
@@ -199,7 +210,7 @@ class Main {
 		t.buildMatrix();
 			
 		// Rotate suzanne
-		var suzanne = Scene.active.getChild("Trya");
+		var suzanne = Scene.active.getChild("SSphere");
 		App.notifyOnUpdate(function() {
 			suzanne.transform.rotate(new Vec4(0, 0, 1), 0.02);
 		});

@@ -64,16 +64,21 @@ class Main {
 					cull_mode: "clockwise",
 					depth_write: true,
 					constants: [
-						{ name: "color", type: "vec3" },
-						{ name: "WVP", type: "mat4", link: "_worldViewProjectionMatrix" },
-						{ name: "M", type: "mat4", link: "_modelMatrix" },
+						//{ name: "color", type: "vec3" },
+						//{ name: "albedo", type: "vec3" },
+						//{name: "lightCol", type: "vec3"},
+						//{ name: "metallic", type :"float" },
+						//{ name: "roughness", type :"float" },
+						//{ name: "ao", type :"float" },
+						//{ name: "WVP", type: "mat4", link: "_worldViewProjectionMatrix" },
+						//{ name: "M", type: "mat4", link: "_modelMatrix" },
 						{name: "W", type: "mat4", link: "_worldMatrix"},
 						{ name: "P", type: "mat4", link: "_projectionMatrix" },
 						{ name: "V", type: "mat4", link: "_viewMatrix" },
-						{ name: "N", type: "mat3", link: "_normalMatrix"},
+						//{ name: "N", type: "mat3", link: "_normalMatrix"},
 						{
                             link: "_lightColor",
-                            name: "lightColor",
+                            name: "lightCol",
                             type: "vec3"
                         },
                         {
@@ -90,6 +95,11 @@ class Main {
 							link: "_cameraPosition",
 							name: "cameraPos",
 							type: "vec3"
+						},
+						{
+							link: "_cameraLook",
+							name: "cameraDir",
+							type: "vec3"
 						}
 					],
 					texture_units: [
@@ -102,7 +112,7 @@ class Main {
 					vertex_elements: [
 						{ name: "pos", data: "short4norm" },
 						{ name: "nor",data: "short2norm"},
-						{name: "tex", data: "short2norm"}
+						{ name: "tex", data: "short2norm"}
 					]
 				}
 			]
@@ -116,15 +126,15 @@ class Main {
             "name": "LightData",
             "type": "point",
             "color": colL,
-            "strength": 1.0,
+            "strength": 20.0,
             "near_plane": 0.1,
             "far_plane": 50.0,
             "fov": 0.85
         };
 		raw.light_datas.push(ls);
 
-		var col = new kha.arrays.Float32Array(3);
-		col[0] = 1.0; col[1] = 0.5; col[2] = 0.31;
+		//var col = new kha.arrays.Float32Array(3);
+		//col[0] = 0.5; col[1] = 0.0; col[2] = 0.0;
 
 		var md:TMaterialData = {
 			name: "MyMaterial",
@@ -133,16 +143,20 @@ class Main {
 				{
 					name: "mesh",
 					bind_constants: [
-						{ name: "color", vec3: col },
-						{name: "lightColor", vec3: colL}
+						//{ name: "color", vec3: col },
+						//{ name: "albedo", vec3: col },
+						//{name: "lightCol", vec3: colL},
+						//{ name: "metallic", float: 0.1 },
+						//{ name: "roughness", float: 1.0 },
+						//{ name: "ao", float: 1.0 },
 						//{name: "cameraPos", vec3: caLoc}
 					],
 					bind_textures: [
-						{name: "albedoMap", file: "rustedironDiffuse.png"},
-						{name: "normalMap", file: "rustedironNormal.png"},
-						{name: "metallicMap", file: "rustedironMetalness.png"},
-						{name: "roughnessMap", file: "rustedironRoughness.png"},
-						{name: "aoMap", file: "rustedironAO.png"}
+						{name: "albedoMap", file: "metalgrid2_basecolor.png"},
+						{name: "normalMap", file: "metalgrid2_normal-dx.png"},
+						{name: "metallicMap", file: "metalgrid2_metallic.png"},
+						{name: "roughnessMap", file: "metalgrid2_roughness.png"},
+						{name: "aoMap", file: "metalgrid2_AO.png"}
 					]
 				}
 			]
@@ -212,7 +226,7 @@ class Main {
 		// Rotate suzanne
 		var suzanne = Scene.active.getChild("SSphere");
 		App.notifyOnUpdate(function() {
-			suzanne.transform.rotate(new Vec4(0, 0, 1), 0.02);
+			suzanne.transform.rotate(new Vec4(0, 0, 1), 0.01);
 		});
 	}
 }

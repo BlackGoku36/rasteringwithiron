@@ -7,7 +7,7 @@ in vec2 texcoords;
 
 out vec4 fragColor;
 
-uniform vec3 lightColor;
+uniform vec3 lightCol;
 uniform vec3 lightDir;
 //uniform vec3 lightPos;
 //uniform vec3 cameraPos;
@@ -23,7 +23,7 @@ void main() {
 
 	float dotNL = max(0.0, dot(n, lightDir));
 
-	vec3 diffuse = tex * max(0.0, dotNL) * lightColor;
+	vec3 diffuse = tex * max(0.0, dotNL) * lightCol;
 
 	vec3 ambient = vec3(0.03) * tex * tex2;
 

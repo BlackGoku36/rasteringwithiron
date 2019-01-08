@@ -10,13 +10,14 @@ out vec3 FragPos;
 
 out vec2 texcoords;
 
-uniform mat3 N;
-uniform mat4 WVP;
-uniform mat4 M;
+//uniform mat3 N;
+uniform mat4 P;
+uniform mat4 V;
+uniform mat4 W;
 
 void main() {
-	wnormal = normalize(N * nor);
-	texcoords = tex;
-	FragPos = vec3(M * vec4(pos.xyz, 1.0));
-	gl_Position = WVP * vec4(pos.xyz, 1.0);
+    texcoords = tex;
+    FragPos = vec3(W * vec4(pos.xyz, 1.0));
+    wnormal = mat3(W) * nor;   
+    gl_Position = P * V * vec4(FragPos.xyz, 1.0);
 }

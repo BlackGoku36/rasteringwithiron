@@ -2,25 +2,32 @@
 
 out vec4 FragColor;
 in vec2 TexCoords;
-
 in vec3 WorldPos;
-
 in vec3 Normal;
-  
-uniform vec3 cameraPos;
-  
+
+// material parameters
 uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
 uniform sampler2D roughnessMap;
 uniform sampler2D aoMap;
 
+// lights
 uniform vec3 lightPos;
-uniform vec3 lightColor;
+uniform vec3 lightCol;
+uniform vec3 lightDir;
+
+uniform vec3 cameraPos;
+uniform vec3 cameraDir;
 
 const float PI = 3.14159265359;
-
-vec3 getNormalFromMap(){
+// ----------------------------------------------------------------------------
+// Easy trick to get tangent-normals to world-space to keep PBR code simplified.
+// Don't worry if you don't get what's going on; you generally want to do normal 
+// mapping the usual way for performance anways; I do plan make a note of this 
+// technique somewhere later in the normal mapping tutorial.
+vec3 getNormalFromMap()
+{
     vec3 tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
 
     vec3 Q1  = dFdx(WorldPos);
@@ -77,14 +84,14 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 }
 // ----------------------------------------------------------------------------
 void main()
-{	
-	vec3 albedo     = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
-    float metallic  = texture(metallicMap, TexCoords).r;
-    float roughness = texture(roughnessMap, TexCoords).r;
-	float ao = texture(aoMap, TexCoords).r;
-
-    vec3 N = normalize(Normal);
-    vec3 V = normalize(cameraPos - WorldPos);
+{		
+    vec3 albedo     = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
+    float metallic  = 0.1;//texture(metallicMap, TexCoords).w;
+    float roughness = texture(roughnessMap, TexCoords).w;
+    float ao        = texture(aoMap, TexCoords).w;
+    
+    vec3 N = getNormalFromMap();
+    vec3 V = cameraPos;
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
@@ -93,22 +100,22 @@ void main()
 
     // reflectance equation
     vec3 Lo = vec3(0.0);
-       
-	    // calculate per-light radiance
-    vec3 L = normalize(lightPos - WorldPos);
-    vec3 H = normalize(V + L);
-    float distance = length(lightPos - WorldPos);
+        // calculate per-light radiance
+
+    vec3 L = normalize(lightPos -WorldPos);
+    vec3 H = normalize(lightDir - cameraDir);
+    float distance = length(lightDir - WorldPos);
     float attenuation = 1.0 / (distance * distance);
-    vec3 radiance = lightColor * attenuation;
+    vec3 radiance = lightCol * attenuation;
 
         // Cook-Torrance BRDF
     float NDF = DistributionGGX(N, H, roughness);   
     float G   = GeometrySmith(N, V, L, roughness);      
-    vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
+    vec3 F    = fresnelSchlick(max(dot(V, H), 0.0), F0);
            
     vec3 nominator    = NDF * G * F; 
-    float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
-    vec3 specular = nominator / max(denominator, 0.001); // prevent divide by zero for NdotV=0.0 or NdotL=0.0
+    float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001; // 0.001 to prevent divide by zero.
+    vec3 specular = nominator / denominator;
         
         // kS is equal to Fresnel
     vec3 kS = F;
@@ -125,8 +132,7 @@ void main()
     float NdotL = max(dot(N, L), 0.0);        
 
         // add to outgoing radiance Lo
-    Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
-      
+    Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again   
     
     // ambient lighting (note that the next IBL tutorial will replace 
     // this ambient lighting with environment lighting).

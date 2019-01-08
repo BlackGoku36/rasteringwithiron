@@ -75,9 +75,9 @@ void main()
     vec3 Lo = vec3(0.0);
         // calculate per-light radiance
 
-    vec3 L = normalize(lightPos -WorldPos);
-    vec3 H = normalize(lightDir - cameraDir);
-    float distance = length(lightDir - WorldPos);
+    vec3 L = normalize(lightDir + cameraPos);
+    vec3 H = normalize(V+L);
+    float distance = length(lightDir - cameraPos);
     float attenuation = 1.0 / (distance * distance);
     vec3 radiance = lightCol * attenuation;
 

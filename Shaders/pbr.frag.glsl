@@ -5,6 +5,7 @@ in vec2 TexCoords;
 in vec3 WorldPos;
 in vec3 Normal;
 
+
 // material parameters
 uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
@@ -85,13 +86,13 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 // ----------------------------------------------------------------------------
 void main()
 {		
-    vec3 albedo     = pow(texture(albedoMap, TexCoords).rgb, vec3(2.2));
-    float metallic  = 0.1;//texture(metallicMap, TexCoords).w;
-    float roughness = texture(roughnessMap, TexCoords).w;
-    float ao        = texture(aoMap, TexCoords).w;
+    vec3 albedo     = pow(texture(albedoMap, TexCoords.xy).rgb, vec3(2.2));
+    float metallic  = texture(metallicMap, TexCoords).r;
+    float roughness = texture(roughnessMap, TexCoords).r;
+    float ao        = texture(aoMap, TexCoords).r;
     
     vec3 N = getNormalFromMap();
-    vec3 V = cameraPos;
+    vec3 V = normalize(cameraPos - WorldPos);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
@@ -102,9 +103,9 @@ void main()
     vec3 Lo = vec3(0.0);
         // calculate per-light radiance
 
-    vec3 L = normalize(lightPos -WorldPos);
-    vec3 H = normalize(lightDir - cameraDir);
-    float distance = length(lightDir - WorldPos);
+    vec3 L = normalize(lightDir + cameraPos);
+    vec3 H = normalize(V+L);
+    float distance = length(lightDir - cameraPos);
     float attenuation = 1.0 / (distance * distance);
     vec3 radiance = lightCol * attenuation;
 

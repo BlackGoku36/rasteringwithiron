@@ -126,7 +126,7 @@ class Main {
             "name": "LightData",
             "type": "point",
             "color": colL,
-            "strength": 20.0,
+            "strength": 10.0,
             "near_plane": 0.1,
             "far_plane": 50.0,
             "fov": 0.85
@@ -152,11 +152,11 @@ class Main {
 						//{name: "cameraPos", vec3: caLoc}
 					],
 					bind_textures: [
-						{name: "albedoMap", file: "metalgrid2_basecolor.png"},
-						{name: "normalMap", file: "metalgrid2_normal-dx.png"},
-						{name: "metallicMap", file: "metalgrid2_metallic.png"},
-						{name: "roughnessMap", file: "metalgrid2_roughness.png"},
-						{name: "aoMap", file: "metalgrid2_AO.png"}
+						{name: "albedoMap", file: "rustedironDiffuse.png"},
+						{name: "normalMap", file: "rustedironNormal.png"},
+						{name: "metallicMap", file: "rustedironMetalness.png"},
+						{name: "roughnessMap", file: "rustedironRoughness.png"},
+						{name: "aoMap", file: "rustedironAO.png"}
 					]
 				}
 			]
@@ -180,9 +180,9 @@ class Main {
 
 		// Mesh object
 		var o:TObj = {
-			name: "SSphere",
+			name: "Object",
 			type: "mesh_object",
-			data_ref: "SSphere.arm/Sphere",
+			data_ref: "Wood.arm/Cube",
 			material_refs: ["MyMaterial"],
 			transform: null,
 		};
@@ -224,9 +224,9 @@ class Main {
 		t.buildMatrix();
 			
 		// Rotate suzanne
-		var suzanne = Scene.active.getChild("SSphere");
+		var suzanne = Scene.active.getChild("Object");
 		App.notifyOnUpdate(function() {
-			suzanne.transform.rotate(new Vec4(0, 0, 1), 0.01);
+			suzanne.transform.rotate(new Vec4(0, 0, 1), 0.005);
 		});
 	}
 }

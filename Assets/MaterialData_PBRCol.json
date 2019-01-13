@@ -1,0 +1,58 @@
+{
+	"shader_datas": [
+		{
+			"name": "ShaderData",
+			"contexts": [
+				{
+					"name": "mesh",
+					"vertex_shader": "pbr.vert",
+					"fragment_shader": "pbrcolor.frag",
+					"compare_mode": "less",
+					"cull_mode": "clockwise",
+					"depth_write": true,
+					"constants": [
+						{ "name": "color", "type": "vec3" },
+						{ "name": "albedo", "type": "vec3" },
+						{ "name": "lightCol", "type": "vec3"},
+						{ "name": "metallic", "type" :"float" },
+						{ "name": "roughness", "type" :"float" },
+						{ "name": "ao", "type" :"float" },
+						{ "name": "W", "type": "mat4", "link": "_worldMatrix"},
+						{ "name": "P", "type": "mat4", "link": "_projectionMatrix" },
+						{ "name": "V", "type": "mat4", "link": "_viewMatrix" },
+						{
+							"link": "_lightColor",
+							"name": "lightCol",
+							"type": "vec3"
+						},
+						{
+							"link": "_lightDirection",
+							"name": "lightDir",
+							"type": "vec3"
+						},
+						{
+							"link": "_lightPosition",
+							"name": "lightPos",
+							"type": "vec3"
+						},
+						{
+							"link": "_cameraPosition",
+							"name": "cameraPos",
+							"type": "vec3"
+						},
+						{
+							"link": "_cameraLook",
+							"name": "cameraDir",
+							"type": "vec3"
+						}
+					],
+					"vertex_elements": [
+						{ "name": "pos", "data": "short4norm" },
+						{ "name": "nor","data": "short2norm"},
+						{ "name": "tex", "data": "short2norm"}
+					]
+				}
+			]
+		}
+	]
+}

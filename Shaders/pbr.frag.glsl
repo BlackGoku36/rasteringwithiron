@@ -103,16 +103,16 @@ void main()
     vec3 Lo = vec3(0.0);
         // calculate per-light radiance
 
-    vec3 L = normalize(lightDir + cameraPos);
+    vec3 L = normalize(lightPos - WorldPos);
     vec3 H = normalize(V+L);
-    float distance = length(lightDir - cameraPos);
+    float distance = length(lightPos - WorldPos);
     float attenuation = 1.0 / (distance * distance);
     vec3 radiance = lightCol * attenuation;
 
         // Cook-Torrance BRDF
     float NDF = DistributionGGX(N, H, roughness);   
     float G   = GeometrySmith(N, V, L, roughness);      
-    vec3 F    = fresnelSchlick(max(dot(V, H), 0.0), F0);
+    vec3 F = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
            
     vec3 nominator    = NDF * G * F; 
     float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001; // 0.001 to prevent divide by zero.

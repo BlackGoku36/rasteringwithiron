@@ -1,0 +1,54 @@
+{
+	"shader_datas": [
+		{
+			"name": "Material_data",
+			"contexts":[
+				{
+					"name": "mesh",
+					"vertex_shader": "pbr.vert",
+					"fragment_shader": "pbr.frag",
+					"compare_mode": "less",
+					"cull_mode": "clockwise",
+					"depth_write": true,
+					"constants":[
+						{"name": "W", "type": "mat4", "link": "_worldMatrix"},
+						{"name": "P", "type": "mat4", "link": "_projectionMatrix"},
+						{"name": "V", "type": "mat4", "link": "_viewMatrix"},
+						{
+							"link": "_lightColor",
+							"name": "lightCol",
+							"type": "vec3"
+						},
+						{
+							"link": "_lightDirection",
+							"name": "lightDir",
+							"type": "vec3"
+						},
+						{
+							"link": "_lightPosition",
+							"name": "lightPos",
+							"type": "vec3"
+						},
+						{
+							"link": "_cameraPosition",
+							"name": "cameraPos",
+							"type": "vec3"
+						}
+					],
+					"texture_units":[
+						{"name": "albedoMap"},
+						{"name": "normalMap"},
+						{"name": "metallicMap"},
+						{"name": "roughnessMap"},
+						{"name": "aoMap"}
+					],
+					"vertex_elements":[
+						{ "name": "pos", "data": "short4norm"},
+						{ "name": "nor","data": "short2norm"},
+						{ "name": "tex", "data": "short2norm"}
+					]
+				}
+			]
+		}
+	]
+}

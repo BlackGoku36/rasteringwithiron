@@ -17,5 +17,5 @@ void main()
     TexCoords = tex;
     WorldPos = vec3(W * vec4(pos.xyz, 1.0));
     Normal = mat3(W) * nor;
-    gl_Position = P * V * vec4(WorldPos.xyz, 1.0);
+    gl_Position = P * V * vec4(WorldPos, 1.0);
 }

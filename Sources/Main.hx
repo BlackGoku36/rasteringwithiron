@@ -1,5 +1,7 @@
 package;
 
+import kha.System;
+import iron.system.Input;
 import iron.math.Vec3;
 import haxe.ds.Vector;
 import iron.data.MaterialData.MaterialContext;
@@ -58,24 +60,21 @@ class Main {
 			contexts: [
 				{
 					name: "mesh",
-					vertex_shader: "pbr.vert",
-					fragment_shader: "pbr.frag",
+					vertex_shader: "toon.vert",
+					fragment_shader: "toon.frag",
 					compare_mode: "less",
 					cull_mode: "clockwise",
 					depth_write: true,
 					constants: [
-						//{ name: "color", type: "vec3" },
-						//{ name: "albedo", type: "vec3" },
-						//{name: "lightCol", type: "vec3"},
-						//{ name: "metallic", type :"float" },
-						//{ name: "roughness", type :"float" },
-						//{ name: "ao", type :"float" },
-						//{ name: "WVP", type: "mat4", link: "_worldViewProjectionMatrix" },
-						//{ name: "M", type: "mat4", link: "_modelMatrix" },
+						{ name: "albedo", type: "vec3" },
+						{name: "lightCol", type: "vec3"},
+						{ name: "metallic", type :"float" },
+						{ name: "roughness", type :"float" },
+						{ name: "ao", type :"float" },
 						{name: "W", type: "mat4", link: "_worldMatrix"},
 						{ name: "P", type: "mat4", link: "_projectionMatrix" },
 						{ name: "V", type: "mat4", link: "_viewMatrix" },
-						//{ name: "N", type: "mat3", link: "_normalMatrix"},
+						{ name: "N", type: "mat3", link: "_normalMatrix"},
 						{
                             link: "_lightColor",
                             name: "lightCol",
@@ -120,21 +119,21 @@ class Main {
 		raw.shader_datas.push(sh);
 
 		var colL = new kha.arrays.Float32Array(3);
-		colL[0] = 1.0; colL[1] = 1.0; colL[2] = 1.0;
+		colL[0] = 500.0; colL[1] = 500.0; colL[2] = 500.0;
 
 		var ls:TLightData = {
             "name": "LightData",
             "type": "point",
             "color": colL,
-            "strength": 10.0,
+            "strength": 20.0,
             "near_plane": 0.1,
             "far_plane": 50.0,
-            "fov": 0.85
+            "fov": 0.8
         };
 		raw.light_datas.push(ls);
 
-		//var col = new kha.arrays.Float32Array(3);
-		//col[0] = 0.5; col[1] = 0.0; col[2] = 0.0;
+		var col = new kha.arrays.Float32Array(3);
+		col[0] = 0.5; col[1] = 0.0; col[2] = 0.0;
 
 		var md:TMaterialData = {
 			name: "MyMaterial",
@@ -143,20 +142,18 @@ class Main {
 				{
 					name: "mesh",
 					bind_constants: [
-						//{ name: "color", vec3: col },
-						//{ name: "albedo", vec3: col },
-						//{name: "lightCol", vec3: colL},
-						//{ name: "metallic", float: 0.1 },
-						//{ name: "roughness", float: 1.0 },
-						//{ name: "ao", float: 1.0 },
-						//{name: "cameraPos", vec3: caLoc}
+						{ name: "albedo", vec3: col },
+						{name: "lightCol", vec3: colL},
+						{ name: "metallic", float: 0.0 },
+						{ name: "roughness", float: 1.0 },
+						{ name: "ao", float: 1.0 },
 					],
 					bind_textures: [
-						{name: "albedoMap", file: "rustedironDiffuse.png"},
-						{name: "normalMap", file: "rustedironNormal.png"},
-						{name: "metallicMap", file: "rustedironMetalness.png"},
-						{name: "roughnessMap", file: "rustedironRoughness.png"},
-						{name: "aoMap", file: "rustedironAO.png"}
+						{name: "albedoMap", file: "metalgrid2_basecolor.png"},
+						{name: "normalMap", file: "metalgrid2_normal-dx.png"},
+						{name: "metallicMap", file: "metalgrid2_metallic.png"},
+						{name: "roughnessMap", file: "metalgrid2_roughness.png"},
+						{name: "aoMap", file: "metalgrid2_AO.png"}
 					]
 				}
 			]
@@ -182,7 +179,7 @@ class Main {
 		var o:TObj = {
 			name: "Object",
 			type: "mesh_object",
-			data_ref: "Wood.arm/Cube",
+			data_ref: "SSphere.arm/Sphere",
 			material_refs: ["MyMaterial"],
 			transform: null,
 		};
@@ -209,24 +206,82 @@ class Main {
 			trace('Monkey ready');
 			sceneReady();
 		});
-
-		// Instantiate single object
-		// Scene.active.parseObject(raw.name, o.name, null, function(o:Object) {
-		// 	trace('Monkey ready');
-		// });
 	}
 
 	static function sceneReady() {
+		var mouse = Input.getMouse();
+		mouse.lock();
 		// Set camera
 		var t = Scene.active.camera.transform;
 		t.loc.set(0, -3, 0);
 		t.rot.fromTo(new Vec4(0, 0, 1), new Vec4(0, -1, 0));
 		t.buildMatrix();
-			
-		// Rotate suzanne
-		var suzanne = Scene.active.getChild("Object");
-		App.notifyOnUpdate(function() {
-			suzanne.transform.rotate(new Vec4(0, 0, 1), 0.005);
-		});
+
+		//update
+		App.notifyOnUpdate(update);
+	}
+	static function update(){
+		var kb = Input.getKeyboard();
+		var mouse = Input.getMouse();
+
+		var doRotate= true;
+		//Rotate Object
+		var object = Scene.active.getChild("Object");
+
+		object.transform.rotate(new Vec4(0, 0, 1), 0.02);
+
+		//Camera Controller
+		var dir = new Vec4();
+		var xvec = new Vec4();
+		var yvec = new Vec4();
+
+		var camera = Scene.active.camera;
+
+		var moveForward =  kb.down("w");
+		var moveBackward = kb.down("s");
+		var moveLeft = kb.down("a");
+		var moveRight = kb.down("d");
+		var moveUP = kb.down("e");
+		var moveDown = kb.down("q");
+
+		dir.set(0.0, 0.0, 0.0);
+
+		if (moveForward){
+			dir.addf(camera.look().x, camera.look().y, camera.look().z);
+		}
+		if (moveBackward){
+			dir.addf(-camera.look().x, -camera.look().y, -camera.look().z);
+		}
+		if (moveLeft){
+			dir.addf(-camera.right().x,-camera.right().y, -camera.right().z);
+		}
+		if (moveRight){
+			dir.addf(camera.right().x, camera.right().y, camera.right().z);
+		}
+		if (moveUP){
+			dir.addf(camera.up().x, camera.up().y, camera.up().z);
+		}
+		if (moveDown){
+			dir.addf(-camera.up().x, -camera.up().y, -camera.up().z);
+		}
+
+		if (moveForward || moveBackward || moveLeft || moveRight || moveUP || moveDown){
+			if (kb.down("shift")){
+				dir.mult(2.5);
+			}
+			camera.transform.translate(dir.x/100, dir.y/100, dir.z/100);
+		}
+		if (mouse.started("left")){
+			mouse.lock();
+		}
+		if (kb.started("escape")){
+			mouse.unlock();
+		}
+		if (mouse.locked){
+			if (mouse.moved){
+				camera.transform.rotate(Vec4.zAxis(), -mouse.movementX/200);
+				camera.transform.rotate(camera.right(), -mouse.movementY/200);
+			}
+		}
 	}
 }

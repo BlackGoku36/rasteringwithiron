@@ -22,11 +22,7 @@ uniform vec3 cameraPos;
 uniform vec3 cameraDir;
 
 const float PI = 3.14159265359;
-// ----------------------------------------------------------------------------
-// Easy trick to get tangent-normals to world-space to keep PBR code simplified.
-// Don't worry if you don't get what's going on; you generally want to do normal 
-// mapping the usual way for performance anways; I do plan make a note of this 
-// technique somewhere later in the normal mapping tutorial.
+
 vec3 getNormalFromMap()
 {
     vec3 tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
@@ -103,7 +99,7 @@ void main()
     vec3 Lo = vec3(0.0);
         // calculate per-light radiance
 
-    vec3 L = normalize(lightPos - WorldPos);
+    vec3 L = lightDir;
     vec3 H = normalize(V+L);
     float distance = length(lightPos - WorldPos);
     float attenuation = 1.0 / (distance * distance);

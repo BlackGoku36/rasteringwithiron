@@ -96,7 +96,7 @@ class Main {
 							type: "vec3"
 						},
 						{
-							link: "_cameraLook",
+							link: "_cameraDirection",
 							name: "cameraDir",
 							type: "vec3"
 						}
@@ -119,13 +119,13 @@ class Main {
 		raw.shader_datas.push(sh);
 
 		var colL = new kha.arrays.Float32Array(3);
-		colL[0] = 500.0; colL[1] = 500.0; colL[2] = 500.0;
+		colL[0] = 1.0; colL[1] = 1.0; colL[2] = 1.0;
 
 		var ls:TLightData = {
             "name": "LightData",
             "type": "point",
             "color": colL,
-            "strength": 20.0,
+            "strength": 10.0,
             "near_plane": 0.1,
             "far_plane": 50.0,
             "fov": 0.8
@@ -144,16 +144,16 @@ class Main {
 					bind_constants: [
 						{ name: "albedo", vec3: col },
 						{name: "lightCol", vec3: colL},
-						{ name: "metallic", float: 0.0 },
-						{ name: "roughness", float: 1.0 },
+						{ name: "metallic", float: 1.0 },
+						{ name: "roughness", float: 0.0 },
 						{ name: "ao", float: 1.0 },
 					],
 					bind_textures: [
-						{name: "albedoMap", file: "metalgrid2_basecolor.png"},
-						{name: "normalMap", file: "metalgrid2_normal-dx.png"},
-						{name: "metallicMap", file: "metalgrid2_metallic.png"},
-						{name: "roughnessMap", file: "metalgrid2_roughness.png"},
-						{name: "aoMap", file: "metalgrid2_AO.png"}
+						{name: "albedoMap", file: "rustedironDiffuse.png"},
+						{name: "normalMap", file: "rustedironNormal.png"},
+						{name: "metallicMap", file: "rustedironMetalness.png"},
+						{name: "roughnessMap", file: "rustedironRoughness.png"},
+						{name: "aoMap", file: "rustedironAO.png"}
 					]
 				}
 			]
@@ -179,7 +179,7 @@ class Main {
 		var o:TObj = {
 			name: "Object",
 			type: "mesh_object",
-			data_ref: "SSphere.arm/Sphere",
+			data_ref: "SBunny.arm/bunny",
 			material_refs: ["MyMaterial"],
 			transform: null,
 		};
@@ -212,10 +212,17 @@ class Main {
 		var mouse = Input.getMouse();
 		mouse.lock();
 		// Set camera
-		var t = Scene.active.camera.transform;
+		var t = Scene.active.camera.transform;//Set camera location on init
 		t.loc.set(0, -3, 0);
 		t.rot.fromTo(new Vec4(0, 0, 1), new Vec4(0, -1, 0));
 		t.buildMatrix();
+
+		var l = Scene.active.getChild("Light").transform;//Set light location on init
+		l.loc.set(0.0, 2.0, 10.0);
+		l.buildMatrix();
+
+		var object = Scene.active.getChild("Object");//set rotation of object to be appear straight(case in object like standford bunny/Utah teapot)
+		object.transform.setRotation(1.570796, 0, 0);
 
 		//update
 		App.notifyOnUpdate(update);
@@ -228,7 +235,7 @@ class Main {
 		//Rotate Object
 		var object = Scene.active.getChild("Object");
 
-		object.transform.rotate(new Vec4(0, 0, 1), 0.02);
+		//object.transform.rotate(new Vec4(0, 0, 1.570796), 0.02);
 
 		//Camera Controller
 		var dir = new Vec4();

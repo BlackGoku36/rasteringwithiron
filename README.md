@@ -18,9 +18,20 @@ Basic rasterizer written in Haxe with help of Iron Library for learning purpose.
 * Mouse click to lock mouse.
 * Escape to unlock mouse.
 
+#Models
+There are bunch of models to test with, Change this line ``data_ref:"Barel.arm/barel"`` where `Barel.arm` is arm file that has model and `barel` is model name, model are listed below, you can add your own!(Note: Make sure your model is uv-unwarped or else it will not show texture, but this isn't case in shader with texture).
+* `Suzanne.arm/Suzanne`(Suzanne)(Warning: No UV in this one)
+* `SBunny.arm/bunny`(Standford Rabbit)
+* `Teapot.arm/teapot`(Utah Teapot)
+* `SSphere.arm/Sphere`(Smooth Sphere)
+* `Icosphere.arm/Icosphere`(Flat Icosphere)
+* `B.arm/Cube`(Box/Cube)
+* `Barel.arm/barel`(Barel used in Armory's Playground)
+
 Feel free to open Issue and Make PR.
 
 ## Demo
 [PBR Demo](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBR.mp4)
+[](Demo/Assets/Toon-ShadingBunny.JPG)
 
 

@@ -1,0 +1,87 @@
+{
+	"name": "ScenePBR.json",
+
+	"camera_datas":[
+		{
+			"name": "MyCamera",
+			"near_plane": 0.1,
+			"far_plane": 100.0,
+			"fov": 0.85
+		}
+	],
+	"camera_ref": "Camera",
+	"light_datas":[
+		{
+            "name": "LightData",
+            "type": "point",
+            "color": [1.0, 1.0, 1.0],
+            "strength": 20.0,
+            "near_plane": 0.1,
+            "far_plane": 50.0,
+            "fov": 0.85
+        }
+	],
+	"material_datas":[
+		{
+			"name": "Material",
+			"shader": "MaterialDataPBR.json/MaterialDataPBR",
+			"contexts": [
+				{
+					"name": "mesh",
+					"bind_constants": [
+
+					],
+					"bind_textures": [
+						{"name": "albedoMap", "file": "rustedironDiffuse.png"},
+						{"name": "normalMap", "file": "rustedironNormal.png"},
+						{"name": "metallicMap", "file": "rustedironMetalness.png"},
+						{"name": "roughnessMap", "file": "rustedironRoughness.png"},
+						{"name": "aoMap", "file": "rustedironAO.png"}
+					]
+				}
+			]
+		}
+	],
+	"objects" :[
+		{
+			"name": "Object",
+			"type": "mesh_object",
+			"data_ref": "Sbunny.arm/bunny",
+			"material_refs": ["Material"],
+			"transform": {
+                "values": [
+                    1.0,0.0,0.0,0.0,
+                    0.0,1.0,0.0,0.0,
+                    0.0,0.0,1.0,0.0,
+                    0.0,0.0,0.0,1.0
+                ]
+            }
+		},
+		{
+			"name": "Light",
+			"type": "light_object",
+            "data_ref": "LightData",
+            "transform": {
+				"values": [
+                    -0.29086464643478394,-0.7711008191108704,0.5663931965827942,11.0,
+                    0.9551711678504944,-0.1998833566904068,0.21839119493961334,4.0,
+                    -0.05518905818462372,0.6045247316360474,0.7946722507476807,16.0,
+                    0.0,0.0,0.0,1.0
+                ]
+			}
+		},
+		{
+			"name": "Camera",
+			"type": "camera_object",
+			"data_ref": "MyCamera",
+			"transform": {
+                "values": [
+                    0.6859206557273865,-0.32401347160339355,0.6515582203865051,7.481131553649902,
+                    0.7276763319969177,0.305420845746994,-0.6141703724861145,-6.5076398849487305,
+                    0.0,0.8953956365585327,0.44527140259742737,5.34366512298584,
+                    0.0,0.0,0.0,1.0
+                ]
+            }
+		}
+	]
+}

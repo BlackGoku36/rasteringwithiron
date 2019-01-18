@@ -1,0 +1,18 @@
+#version 100
+
+uniform mat4 W;
+uniform mat4 P;
+uniform mat4 V;
+
+varying vec3 Normal;
+attribute vec3 nor;
+varying vec3 Pos;
+attribute vec3 pos;
+
+void main()
+{
+    Normal = mat3(vec3(W[0].x, W[0].y, W[0].z), vec3(W[1].x, W[1].y, W[1].z), vec3(W[2].x, W[2].y, W[2].z)) * nor;
+    Pos = mat3(vec3(W[0].x, W[0].y, W[0].z), vec3(W[1].x, W[1].y, W[1].z), vec3(W[2].x, W[2].y, W[2].z)) * pos;
+    gl_Position = ((P * V) * W) * vec4(pos, 1.0);
+}
+

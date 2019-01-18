@@ -1,5 +1,7 @@
 package;
 
+import kha.graphics4.PipelineState;
+import haxe.Json;
 import kha.System;
 import iron.system.Input;
 import iron.math.Vec3;
@@ -16,9 +18,9 @@ import kha.Image;
 
 class Main {
 
-	static var raw:TSceneFormat;
+	//static var raw:TSceneFormat;
 
-	public static var textureImg:Image = null;
+	//public static var textureImg:Image = null;
 
 	public static function main() {
 		kha.System.start({title: "Empty", width: 1280, height: 720}, function(window:kha.Window) {
@@ -33,8 +35,12 @@ class Main {
 			path.clearTarget(0xff6495ED, 1.0);
 			path.drawMeshes("mesh");
 		};
-		RenderPath.setActive(path);
-
+		iron.RenderPath.setActive(path);
+		iron.Scene.setActive("Scene_PBRCol.json", function(o:Object) {
+			trace('Monkey ready');
+			sceneReady();
+		});
+		/*
 		raw = {
 			name: "Scene",
 			shader_datas: [],
@@ -60,8 +66,8 @@ class Main {
 			contexts: [
 				{
 					name: "mesh",
-					vertex_shader: "toon.vert",
-					fragment_shader: "toon.frag",
+					vertex_shader: "pbr.vert",
+					fragment_shader: "pbr.frag",
 					compare_mode: "less",
 					cull_mode: "clockwise",
 					depth_write: true,
@@ -96,7 +102,7 @@ class Main {
 							type: "vec3"
 						},
 						{
-							link: "_cameraDirection",
+							link: "_cameraLook",
 							name: "cameraDir",
 							type: "vec3"
 						}
@@ -119,13 +125,13 @@ class Main {
 		raw.shader_datas.push(sh);
 
 		var colL = new kha.arrays.Float32Array(3);
-		colL[0] = 1.0; colL[1] = 1.0; colL[2] = 1.0;
+		colL[0] = 100.0; colL[1] = 100.0; colL[2] = 100.0;
 
 		var ls:TLightData = {
             "name": "LightData",
             "type": "point",
             "color": colL,
-            "strength": 10.0,
+            "strength": 100.0,
             "near_plane": 0.1,
             "far_plane": 50.0,
             "fov": 0.8
@@ -158,14 +164,14 @@ class Main {
 				}
 			]
 		};
-		raw.material_datas.push(md);
+		raw.material_datas.push(md);*/
 
-		MaterialData.parse(raw.name, md.name, function(res:MaterialData) {
-			dataReady();
-		});
+		//MaterialData.parse(raw.name, md.name, function(res:MaterialData) {
+		//	dataReady();
+		//});
 	}
 
-	static function dataReady() {
+	/*static function dataReady() {
 		// Camera object
 		var co:TObj = {
 			name: "Camera",
@@ -179,7 +185,7 @@ class Main {
 		var o:TObj = {
 			name: "Object",
 			type: "mesh_object",
-			data_ref: "SBunny.arm/bunny",
+			data_ref: "SSphere.arm/Sphere",
 			material_refs: ["MyMaterial"],
 			transform: null,
 		};
@@ -199,14 +205,14 @@ class Main {
                 "values": col
             }
 		};
-		raw.objects.push(lo);
+		raw.objects.push(lo);*/
 
 		// Instantiate scene
-		Scene.create(raw, function(o:Object) {
-			trace('Monkey ready');
-			sceneReady();
-		});
-	}
+		//Scene.create(raw, function(o:Object) {
+			//trace('Monkey ready');
+			//sceneReady();
+		//});
+	//}
 
 	static function sceneReady() {
 		var mouse = Input.getMouse();
@@ -215,23 +221,27 @@ class Main {
 		var t = Scene.active.camera.transform;//Set camera location on init
 		t.loc.set(0, -3, 0);
 		t.rot.fromTo(new Vec4(0, 0, 1), new Vec4(0, -1, 0));
+		trace("camera set");
 		t.buildMatrix();
 
-		var l = Scene.active.getChild("Light").transform;//Set light location on init
-		l.loc.set(0.0, 2.0, 10.0);
-		l.buildMatrix();
+		//var l = Scene.active.getChild("Light").transform;//Set light location on init
+		//l.loc.set(0.0, 2.0, 10.0);
+		//l.buildMatrix();
 
-		var object = Scene.active.getChild("Object");//set rotation of object to be appear straight(case in object like standford bunny/Utah teapot)
-		object.transform.setRotation(1.570796, 0, 0);
-
+		var object = Scene.active.getChild("Object").transform;//set rotation of object to be appear straight(case in object like standford bunny/Utah teapot)
+		object.loc.set(1.0, 1.0, 1.0);
+		object.setRotation(1.570796, 0, 0);
+		trace("obj set");
+		object.buildMatrix();
+		trace("obj set2");
 		//update
 		App.notifyOnUpdate(update);
 	}
+
 	static function update(){
 		var kb = Input.getKeyboard();
 		var mouse = Input.getMouse();
 
-		var doRotate= true;
 		//Rotate Object
 		var object = Scene.active.getChild("Object");
 

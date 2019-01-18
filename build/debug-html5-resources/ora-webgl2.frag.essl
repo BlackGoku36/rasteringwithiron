@@ -1,0 +1,46 @@
+#version 300 es
+precision mediump float;
+precision highp int;
+
+uniform highp sampler2D normalMap;
+uniform highp sampler2D albedoMap;
+uniform highp vec3 lightPos;
+uniform highp vec3 lightCol;
+uniform highp vec3 cameraPos;
+uniform highp sampler2D metallicMap;
+uniform highp vec3 cameraDir;
+
+in highp vec2 TexCoords;
+in highp vec3 WorldPos;
+in highp vec3 Normal;
+out highp vec4 FragColor;
+
+highp vec3 getNormalFromMap()
+{
+    highp vec3 tangentNormal = (texture(normalMap, TexCoords).xyz * 2.0) - vec3(1.0);
+    highp vec3 Q1 = dFdx(WorldPos);
+    highp vec3 Q2 = dFdy(WorldPos);
+    highp vec2 st1 = dFdx(TexCoords);
+    highp vec2 st2 = dFdy(TexCoords);
+    highp vec3 N = normalize(Normal);
+    highp vec3 T = normalize((Q1 * st2.y) - (Q2 * st1.y));
+    highp vec3 B = -normalize(cross(N, T));
+    highp mat3 TBN = mat3(vec3(T), vec3(B), vec3(N));
+    return normalize(TBN * tangentNormal);
+}
+
+void main()
+{
+    highp vec3 ambient = vec3(0.20000000298023223876953125) * texture(albedoMap, TexCoords).xyz;
+    highp vec3 N = getNormalFromMap();
+    highp vec3 lightDir = normalize(lightPos - WorldPos);
+    highp float diff = max(dot(N, lightDir), 0.0);
+    highp vec3 diffuse = (lightCol * diff) * texture(albedoMap, TexCoords).xyz;
+    highp vec3 viewDir = normalize(cameraPos - WorldPos);
+    highp vec3 reflectDir = reflect(-lightDir, N);
+    highp float spec = pow(max(dot(viewDir, reflectDir), 0.0), 0.300000011920928955078125);
+    highp vec3 specular = (vec3(1.0) * spec) * texture(metallicMap, TexCoords).xyz;
+    highp vec3 result = (ambient + diffuse) + specular;
+    FragColor = vec4(result, 1.0);
+}
+

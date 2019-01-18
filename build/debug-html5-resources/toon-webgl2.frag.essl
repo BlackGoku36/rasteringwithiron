@@ -1,0 +1,39 @@
+#version 300 es
+precision mediump float;
+precision highp int;
+
+uniform highp vec3 lightPos;
+uniform highp vec3 lightDir;
+uniform highp vec3 cameraPos;
+uniform highp vec3 lightCol;
+uniform highp vec3 cameraDir;
+
+in highp vec3 Normal;
+in highp vec3 Pos;
+out highp vec4 FragColor;
+
+void main()
+{
+    highp vec3 n = normalize(Normal);
+    highp float intensity = dot(vec3(lightPos), n);
+    highp float _distance = length(lightPos - Pos);
+    highp vec3 R = (-lightDir) - (n * (2.0 * dot(n, -lightDir)));
+    highp float cosTheta = clamp(dot(n, lightDir), 0.0, 1.0);
+    highp vec3 ambient = vec3(0.100000001490116119384765625);
+    highp vec3 viewDir = normalize(cameraPos - Pos);
+    highp vec3 reflectDir = reflect(-lightDir, n);
+    highp float spec = pow(clamp(dot(viewDir, R), 0.0, 1.0), 32.0);
+    highp vec3 specular = (vec3(0.20000000298023223876953125) * lightCol) * spec;
+    highp vec3 color;
+    if (intensity > 1.0)
+    {
+        color = vec3(0.20000000298023223876953125, 0.20000000298023223876953125, 1.0);
+    }
+    else
+    {
+        color = vec3(0.0, 0.0, 0.5);
+    }
+    highp vec3 result = (color + specular) + ambient;
+    FragColor = vec4(result, 1.0);
+}
+

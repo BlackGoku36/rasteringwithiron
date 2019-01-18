@@ -12,6 +12,6 @@ uniform mat4 W;
 
 void main(){
 	Normal = mat3(W) * nor;
-	Pos = mat3(W) * pos;
+	Pos = mat3(W) * pos.xyz;
 	gl_Position = P * V * W * vec4(pos.xyz, 1.0);
 }

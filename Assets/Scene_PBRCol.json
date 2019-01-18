@@ -1,5 +1,5 @@
 {
-	"name": "Scene_PBR.json",
+	"name": "Scene_PBRCol.json",
 	"camera_datas":[
 		{
 			"name": "MyCamera",
@@ -9,7 +9,7 @@
 		}
 	],
 	"camera_ref" : "Camera",
-	"lamp_datas":[
+	"light_datas":[
 		{
             "name": "LightData",
             "type": "point",
@@ -23,7 +23,7 @@
 	"material_datas":[
 		{
 			"name": "Material",
-			"shader": "MaterialData_PBR.json/ShaderData",
+			"shader": "MaterialData_PBRCol.json/ShaderData",
 			"contexts": [
 				{
 					"name": "mesh",

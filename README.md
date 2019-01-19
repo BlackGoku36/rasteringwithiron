@@ -32,6 +32,7 @@ Feel free to open Issue and Make PR.
 
 ## Demo
 [PBR Demo](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBR.mp4)
-[Toon-Shading](Demo/Assets/Toon-ShadingBunny.JPG)
+
+[](Toon-ShadingBunny.JPG)
 
 

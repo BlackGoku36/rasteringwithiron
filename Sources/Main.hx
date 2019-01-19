@@ -1,6 +1,6 @@
 package;
 
-import kha.graphics4.PipelineState;
+import kha.Color;
 import haxe.Json;
 import kha.System;
 import iron.system.Input;
@@ -32,7 +32,7 @@ class Main {
 		var path = new RenderPath();
 		path.commands = function() {
 			path.setTarget("");
-			path.clearTarget(0xff6495ED, 1.0);
+			path.clearTarget(Color.fromBytes(40, 119, 255, 255), 1.0);//Light Blue Color
 			path.drawMeshes("mesh");
 		};
 		iron.RenderPath.setActive(path);

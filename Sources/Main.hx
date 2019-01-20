@@ -18,10 +18,6 @@ import kha.Image;
 
 class Main {
 
-	//static var raw:TSceneFormat;
-
-	//public static var textureImg:Image = null;
-
 	public static function main() {
 		kha.System.start({title: "Empty", width: 1280, height: 720}, function(window:kha.Window) {
 			App.init(ready);
@@ -32,14 +28,16 @@ class Main {
 		var path = new RenderPath();
 		path.commands = function() {
 			path.setTarget("");
-			path.clearTarget(Color.fromBytes(40, 119, 255, 255), 1.0);//Light Blue Color
+			path.clearTarget(0xff6495ED, 1.0);
 			path.drawMeshes("mesh");
 		};
-		iron.RenderPath.setActive(path);
-		iron.Scene.setActive("Scene_PBRCol.json", function(o:Object) {
-			trace('Monkey ready');
+		RenderPath.setActive(path);
+
+		// Create scene from "Scene.json" file
+		iron.Scene.setActive("Scene", function(object:iron.object.Object) {
 			sceneReady();
 		});
+	}
 		/*
 		raw = {
 			name: "Scene",
@@ -169,7 +167,7 @@ class Main {
 		//MaterialData.parse(raw.name, md.name, function(res:MaterialData) {
 		//	dataReady();
 		//});
-	}
+	//}
 
 	/*static function dataReady() {
 		// Camera object
@@ -221,19 +219,15 @@ class Main {
 		var t = Scene.active.camera.transform;//Set camera location on init
 		t.loc.set(0, -3, 0);
 		t.rot.fromTo(new Vec4(0, 0, 1), new Vec4(0, -1, 0));
-		trace("camera set");
 		t.buildMatrix();
 
-		//var l = Scene.active.getChild("Light").transform;//Set light location on init
-		//l.loc.set(0.0, 2.0, 10.0);
-		//l.buildMatrix();
+		var l = Scene.active.getChild("Light").transform;//Set light location on init
+		l.loc.set(0.0, 2.0, 10.0);
+		l.buildMatrix();
 
-		var object = Scene.active.getChild("Object").transform;//set rotation of object to be appear straight(case in object like standford bunny/Utah teapot)
-		object.loc.set(1.0, 1.0, 1.0);
-		object.setRotation(1.570796, 0, 0);
-		trace("obj set");
-		object.buildMatrix();
-		trace("obj set2");
+		var object = Scene.active.getChild("Object");//set rotation of object to be appear straight(case in object like standford bunny/Utah teapot)
+		object.transform.setRotation(1.570796, 0, 0);
+
 		//update
 		App.notifyOnUpdate(update);
 	}

@@ -1,19 +1,25 @@
 {
 	"shader_datas": [
 		{
-			"name": "MaterialDataPBR",
-			"contexts":[
+			"contexts": [
 				{
-					"name": "mesh",
-					"vertex_shader": "pbr.vert",
-					"fragment_shader": "pbr.frag",
 					"compare_mode": "less",
-					"cull_mode": "clockwise",
-					"depth_write": true,
 					"constants":[
-						{"name": "W", "type": "mat4", "link": "_worldMatrix"},
-						{"name": "P", "type": "mat4", "link": "_projectionMatrix"},
-						{"name": "V", "type": "mat4", "link": "_viewMatrix"},
+						{
+							"name": "W", 
+							"type": "mat4", 
+							"link": "_worldMatrix"
+						},
+						{
+							"name": "P", 
+							"type": "mat4", 
+							"link": "_projectionMatrix"
+						},
+						{
+							"name": "V", 
+							"type": "mat4", 
+							"link": "_viewMatrix"
+						},
 						{
 							"link": "_lightColor",
 							"name": "lightCol",
@@ -33,22 +39,52 @@
 							"link": "_cameraPosition",
 							"name": "cameraPos",
 							"type": "vec3"
+						},
+						{
+							"link": "_cameraLook",
+							"name": "cameraDir",
+							"type": "vec3"
 						}
 					],
+					"cull_mode": "clockwise",
+					"depth_write": true,
+					"fragment_shader": "pbr.frag",
+					"name": "mesh",
 					"texture_units":[
-						{"name": "albedoMap"},
-						{"name": "normalMap"},
-						{"name": "metallicMap"},
-						{"name": "roughnessMap"},
-						{"name": "aoMap"}
+						{
+							"name": "albedoMap"
+						},
+						{
+							"name": "normalMap"
+						},
+						{
+							"name": "metallicMap"
+						},
+						{
+							"name": "roughnessMap"
+						},
+						{
+							"name": "aoMap"
+						}
 					],
 					"vertex_elements":[
-						{ "name": "pos", "data": "short4norm"},
-						{ "name": "nor","data": "short2norm"},
-						{ "name": "tex", "data": "short2norm"}
-					]
+						{
+							"data": "short4norm",
+							"name": "pos"
+						},
+						{ 
+							"data": "short2norm",
+							"name": "nor"
+						},
+						{ 
+							"data": "short2norm",
+							"name": "tex"
+						}
+					],
+					"vertex_shader": "pbr.vert"
 				}
-			]
+			],
+			"name": "MaterialDataPBR"
 		}
 	]
 }

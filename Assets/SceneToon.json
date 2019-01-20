@@ -26,40 +26,19 @@
             "contexts": [
                 {
                     "bind_constants": [],
-                    "bind_textures": [
-						{
-                            "name": "albedoMap", 
-                            "file": "rustedironDiffuse.png"
-                        },
-						{
-                            "name": "normalMap", 
-                            "file": "rustedironNormal.png"
-                        },
-						{
-                            "name": "metallicMap", 
-                            "file": "rustedironMetalness.png"
-                        },
-						{
-                            "name": "roughnessMap", 
-                            "file": "rustedironRoughness.png"
-                        },
-						{
-                            "name": "aoMap", 
-                            "file": "rustedironAO.png"
-                        }
-					],
+                    "bind_textures": [],
                     "name": "mesh"
                 }
             ],
             "name": "Material",
-            "shader": "MaterialDataPBR.json/MaterialDataPBR"
+            "shader": "ToonMaterial_data.json/ToonMaterial_data"
         }
     ],
     "mesh_datas": [],
-    "name": "ScenePBR.json",
+    "name": "SceneToon.json",
     "objects": [
         {
-            "data_ref": "SSphere.arm/Sphere",
+            "data_ref": "Sbunny.arm/bunny",
             "dimensions": [1.0, 1.0, 1.0],
             "material_refs": ["Material"],
             "mobile": false,

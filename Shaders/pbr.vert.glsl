@@ -1,6 +1,6 @@
 #version 450
 
-in vec3 pos;
+in vec4 pos;
 in vec3 nor;
 in vec2 tex;
 
@@ -16,7 +16,7 @@ uniform mat3 N;
 void main()
 {
     TexCoords = tex;
-    WorldPos = vec3(N * pos);
+    WorldPos = vec3(N * pos.xyz);
     Normal = mat3(N) * nor;
     gl_Position = P * V * W*  vec4(WorldPos, 1.0);
 }

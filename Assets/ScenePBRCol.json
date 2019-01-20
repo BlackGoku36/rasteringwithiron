@@ -1,5 +1,5 @@
 {
-    "camera_datas": [
+	"camera_datas": [
         {
             "clear_color": [0.05, 0.05, 0.05, 1.0],
             "far_plane": 100.0,
@@ -8,58 +8,58 @@
             "name": "Camera",
             "near_plane": 0.1
         }
-    ],
-    "camera_ref": "Camera",
-    "light_datas":[
+	],
+	"camera_ref": "Camera",
+	"light_datas":[
 		{
             "name": "LightData",
             "type": "point",
             "color": [1.0, 1.0, 1.0],
-            "strength": 1.0,
+            "strength": 20.0,
             "near_plane": 0.1,
             "far_plane": 50.0,
             "fov": 0.85
         }
 	],
-    "material_datas": [
-        {
-            "contexts": [
-                {
-                    "bind_constants": [],
-                    "bind_textures": [
-						{
-                            "name": "albedoMap", 
-                            "file": "rustedironDiffuse.png"
+	"material_datas":[
+		{
+			"contexts": [
+				{
+					"bind_constants": [
+						{ 
+                            "name": "albedo", 
+                            "vec3": [0.5, 0.2, 0.0] 
                         },
 						{
-                            "name": "normalMap", 
-                            "file": "rustedironNormal.png"
+                            "name": "lightCol", 
+                            "vec3": [1.0, 1.0, 1.0] 
+                        },
+						{ 
+                            "name": "metallic",
+                            "float": 0.1 
+                        },
+						{ 
+                            "name": "roughness", 
+                            "float": 1.0 
                         },
 						{
-                            "name": "metallicMap", 
-                            "file": "rustedironMetalness.png"
-                        },
-						{
-                            "name": "roughnessMap", 
-                            "file": "rustedironRoughness.png"
-                        },
-						{
-                            "name": "aoMap", 
-                            "file": "rustedironAO.png"
+                            "name": "ao",
+                            "float": 1.0 
                         }
-					],
+                    ],
+                    "bind_textures": [],
                     "name": "mesh"
-                }
+				}
             ],
             "name": "Material",
-            "shader": "MaterialDataPBR.json/MaterialDataPBR"
-        }
+            "shader": "MaterialData_PBRCol.json/MaterialData_PBRCol"
+		}
     ],
-    "mesh_datas": [],
-    "name": "ScenePBR.json",
-    "objects": [
-        {
-            "data_ref": "SSphere.arm/Sphere",
+    "mesh_datas":[],
+    "name": "ScenePBRCol.json",
+	"objects" :[
+		{
+            "data_ref": "Sbunny.arm/bunny",
             "dimensions": [1.0, 1.0, 1.0],
             "material_refs": ["Material"],
             "mobile": false,
@@ -75,7 +75,7 @@
             "transform": null,
             "type": "camera_object"
         },
-        {
+		{
 			"name": "Light",
 			"type": "light_object",
             "data_ref": "LightData",
@@ -88,5 +88,5 @@
                 ]
 			}
 		}
-    ]
+	]
 }

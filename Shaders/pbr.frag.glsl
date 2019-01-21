@@ -99,7 +99,7 @@ void main()
     vec3 Lo = vec3(0.0);
         // calculate per-light radiance
 
-    vec3 L = lightDir;
+    vec3 L = normalize(lightPos - WorldPos);
     vec3 H = normalize(V+L);
     float distance = length(lightPos - WorldPos);
     float attenuation = 1.0 / (distance * distance);

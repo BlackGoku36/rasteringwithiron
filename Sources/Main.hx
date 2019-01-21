@@ -60,8 +60,8 @@ class Main {
 			contexts: [
 				{
 					name: "mesh",
-					vertex_shader: "toon.vert",
-					fragment_shader: "toon.frag",
+					vertex_shader: "pbr.vert",
+					fragment_shader: "pbr.frag",
 					compare_mode: "less",
 					cull_mode: "clockwise",
 					depth_write: true,
@@ -119,13 +119,14 @@ class Main {
 		raw.shader_datas.push(sh);
 
 		var colL = new kha.arrays.Float32Array(3);
-		colL[0] = 1.0; colL[1] = 1.0; colL[2] = 1.0;
+		colL[0] = 10.0; colL[1] = 10.0; colL[2] = 10.0;
 
 		var ls:TLightData = {
             "name": "LightData",
             "type": "point",
             "color": colL,
-            "strength": 10.0,
+            "strength": 100.0,
+			"light_size": 1.0,
             "near_plane": 0.1,
             "far_plane": 50.0,
             "fov": 0.8
@@ -144,8 +145,8 @@ class Main {
 					bind_constants: [
 						{ name: "albedo", vec3: col },
 						{name: "lightCol", vec3: colL},
-						{ name: "metallic", float: 1.0 },
-						{ name: "roughness", float: 0.0 },
+						{ name: "metallic", float: 0.0 },
+						{ name: "roughness", float: 0.1 },
 						{ name: "ao", float: 1.0 },
 					],
 					bind_textures: [
@@ -179,7 +180,7 @@ class Main {
 		var o:TObj = {
 			name: "Object",
 			type: "mesh_object",
-			data_ref: "SBunny.arm/bunny",
+			data_ref: "Teapot.arm/teapot",
 			material_refs: ["MyMaterial"],
 			transform: null,
 		};
@@ -218,7 +219,7 @@ class Main {
 		t.buildMatrix();
 
 		var l = Scene.active.getChild("Light").transform;//Set light location on init
-		l.loc.set(0.0, 2.0, 10.0);
+		l.loc.set(2.6, 0.0, 5.9);
 		l.buildMatrix();
 
 		var object = Scene.active.getChild("Object");//set rotation of object to be appear straight(case in object like standford bunny/Utah teapot)

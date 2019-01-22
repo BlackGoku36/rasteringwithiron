@@ -1,0 +1,67 @@
+{
+    "shader_datas": [
+        {
+            "contexts": [
+                {
+                    "compare_mode": "less",
+                    "constants": [
+                        { 
+                            "name": "W", 
+                            "type": "mat4", 
+                            "link": "_worldMatrix"
+                        },
+                        { 
+                            "name": "P", 
+                            "type": "mat4", 
+                            "link": "_projectionMatrix" 
+                        },
+						{ 
+                            "name": "V", 
+                            "type": "mat4", 
+                            "link": "_viewMatrix" 
+                        },
+                        {
+							"link": "_pointColor",
+							"name": "lightCol",
+							"type": "vec3"
+						},
+						{
+							"link": "_pointPosition",
+							"name": "lightPos",
+							"type": "vec3"
+						},
+                        {
+                            "name":"diffusec",
+                            "type":"vec3"
+                        },
+                        {
+                            "name":"ao",
+                            "type":"vec3"
+                        },
+                        {
+                            "name":"levels",
+                            "type":"int"
+                        }
+                    ],
+                    "cull_mode": "clockwise",
+                    "depth_write": true,
+                    "fragment_shader": "toon.frag",
+                    "name": "mesh",
+                    "texture_units": [],
+                    "vertex_elements": [
+                        {
+                            "data": "short4norm",
+                            "name": "pos"
+                        },
+                        {
+                            "data":"short2norm",
+                            "name":"nor"
+                        }
+                    ],
+                    "vertex_shader": "toon.vert"
+                }
+            ],
+            "name": "ToonMaterial_data"
+        }
+    ]
+}

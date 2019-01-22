@@ -9,17 +9,17 @@ uniform vec3 lightCol;
 uniform vec3 lightDir;
 uniform vec3 cameraPos;
 
-const int levels = 2;
-const float scaleFactor = 1.0 / levels;
-vec3 kD = vec3(1.0, 1.0, 1.0);//1.0, 0.4, 0.1 for orange
-vec3 kA = vec3(0.1, 0.1, 0.1);
+uniform int levels;
+uniform vec3 diffusec;
+uniform vec3 ao;
+
+float scaleFactor = 1.0 / levels;
 
 vec3 toonShade(){
-	vec3 n = normalize(Normal);
-	vec3 s = normalize(vec3(lightPos) - Pos);
+	vec3 s = normalize(lightPos - Pos);
 	float cosine = max(0.0, dot(s, Normal));
-	vec3 diffuse = kD * floor(cosine * levels) * scaleFactor;
-	return lightCol * (kA + diffuse);
+	vec3 diffuse = diffusec * floor(cosine * levels) * scaleFactor;
+	return lightCol * (ao + diffuse);
 }
 
 void main(){

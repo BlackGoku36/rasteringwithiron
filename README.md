@@ -1,8 +1,8 @@
 # rasteringwithiron
-Basic rasterizer written in Haxe with help of Iron Library for learning purpose.
+Basic rasterizer written in Haxe with help of Iron Framework for learning purpose.
 
 # Features
-* PBR.
+* PBR(need fixing).
 * Cel-Shade(little joke, need to do more).
 
 # To-Do
@@ -10,7 +10,6 @@ Basic rasterizer written in Haxe with help of Iron Library for learning purpose.
 * Improve Cel-shading.
 * Add Zui to control.
 * Try using different PBR diffuse model.
-* Move scene and material datas to their individual .json for "Keeping it tidy" reason.
 
 # Movements
 * WASD to move around.
@@ -19,19 +18,18 @@ Basic rasterizer written in Haxe with help of Iron Library for learning purpose.
 * Escape to unlock mouse.
 
 #Models
-There are bunch of models to test with, Change this line ``data_ref:"Barel.arm/barel"`` where `Barel.arm` is arm file that has model and `barel` is model name, model are listed below, you can add your own!(Note: Make sure your model is uv-unwarped or else it will not show texture, but this isn't case in shader with texture).
-* `Suzanne.arm/Suzanne`(Suzanne)(Warning: No UV in this one)
-* `SBunny.arm/bunny`(Standford Rabbit)
-* `Teapot.arm/teapot`(Utah Teapot)
-* `SSphere.arm/Sphere`(Smooth Sphere)
-* `Icosphere.arm/Icosphere`(Flat Icosphere)
-* `B.arm/Cube`(Box/Cube)
-* `Barel.arm/barel`(Barel used in Armory's Playground)
+There are bunch of models to test with, Change this line ``data_ref:"Barel.arm/barel"`` where `Barel.arm` is arm file that has model and `barel` is model name, in Scene .json file, model are listed below, you can add your own!(Note: Make sure your model is uv-unwarped or else it will not show texture, but this isn't case in shader without texture).
+* `Suzanne.arm/Suzanne`(Suzanne)(Warning: No UV in this one).
+* `SBunny.arm/bunny`(Standford Rabbit).
+* `Teapot.arm/teapot`(Utah Teapot).
+* `SSphere.arm/Sphere`(Smooth Sphere).
+* `Icosphere.arm/Icosphere`(Flat Icosphere).
+* `Cube.arm/Cube`(Box/Cube).
 
 Feel free to open Issue and Make PR.
 
-## Demo
-[PBR Demo](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBR.mp4)
-[Toon-Shading](Demo/Assets/Toon-ShadingBunny.JPG)
-
-
+#Scene
+There are 3 Scene.
+* `ScenePBR`- PBR with textures.
+* `ScenePBRCol`- PBR with materials (without textures).
+* `SceneToon`- Toon Shading.

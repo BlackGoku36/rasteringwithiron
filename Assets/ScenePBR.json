@@ -1,0 +1,92 @@
+{
+    "camera_datas": [
+        {
+            "clear_color": [0.05, 0.05, 0.05, 1.0],
+            "far_plane": 100.0,
+            "fov": 0.85,
+            "frustum_culling": true,
+            "name": "Camera",
+            "near_plane": 0.1
+        }
+    ],
+    "camera_ref": "Camera",
+    "light_datas":[
+		{
+            "name": "LightData",
+            "type": "point",
+            "color": [10.0, 10.0, 10.0],
+            "strength": 30.0,
+            "near_plane": 0.1,
+            "far_plane": 50.0,
+            "fov": 0.85
+        }
+	],
+    "material_datas": [
+        {
+            "contexts": [
+                {
+                    "bind_constants": [],
+                    "bind_textures": [
+						{
+                            "name": "albedoMap", 
+                            "file": "rustedironDiffuse.png"
+                        },
+						{
+                            "name": "normalMap", 
+                            "file": "rustedironNormal.png"
+                        },
+						{
+                            "name": "metallicMap", 
+                            "file": "rustedironMetalness.png"
+                        },
+						{
+                            "name": "roughnessMap", 
+                            "file": "rustedironRoughness.png"
+                        },
+						{
+                            "name": "aoMap", 
+                            "file": "rustedironAO.png"
+                        }
+					],
+                    "name": "mesh"
+                }
+            ],
+            "name": "Material",
+            "shader": "MaterialDataPBR.json/MaterialDataPBR"
+        }
+    ],
+    "mesh_datas": [],
+    "name": "ScenePBR.json",
+    "objects": [
+        {
+            "data_ref": "SSphere.arm/Sphere",
+            "dimensions": [1.0, 1.0, 1.0],
+            "material_refs": ["Material"],
+            "mobile": false,
+            "name": "Object",
+            "traits": [],
+            "transform": null,
+            "type": "mesh_object"
+        },
+        {
+            "data_ref": "Camera",
+            "name": "Camera",
+            "traits": [],
+            "transform": null,
+            "type": "camera_object"
+        },
+        {
+			"name": "Light",
+			"type": "light_object",
+            "data_ref": "LightData",
+            "transform": {
+				"values": [
+                    -0.29086464643478394,-0.7711008191108704,0.5663931965827942,11.0,
+                    0.9551711678504944,-0.1998833566904068,0.21839119493961334,4.0,
+                    -0.05518905818462372,0.6045247316360474,0.7946722507476807,16.0,
+                    0.0,0.0,0.0,1.0
+                ]
+			}
+		}
+    ]
+}

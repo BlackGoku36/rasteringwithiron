@@ -75,6 +75,7 @@ class Main {
 						{ name: "P", type: "mat4", link: "_projectionMatrix" },
 						{ name: "V", type: "mat4", link: "_viewMatrix" },
 						{ name: "N", type: "mat3", link: "_normalMatrix"},
+						{name: "WVP", type: "mat4", link: "_worldViewProjectionMatrix"},
 						{
                             link: "_lightColor",
                             name: "lightCol",
@@ -96,7 +97,7 @@ class Main {
 							type: "vec3"
 						},
 						{
-							link: "_cameraDirection",
+							link: "_cameraLook",
 							name: "cameraDir",
 							type: "vec3"
 						}
@@ -126,15 +127,15 @@ class Main {
             "type": "point",
             "color": colL,
             "strength": 100.0,
-			"light_size": 1.0,
+			"light_size": 0.01,
             "near_plane": 0.1,
             "far_plane": 50.0,
             "fov": 0.8
         };
 		raw.light_datas.push(ls);
 
-		var col = new kha.arrays.Float32Array(3);
-		col[0] = 0.5; col[1] = 0.0; col[2] = 0.0;
+		var cola = new kha.arrays.Float32Array(3);
+		cola[0] = 1.0; cola[1] = 1.0; cola[2] = 1.0;
 
 		var md:TMaterialData = {
 			name: "MyMaterial",
@@ -143,11 +144,11 @@ class Main {
 				{
 					name: "mesh",
 					bind_constants: [
-						{ name: "albedo", vec3: col },
+						{ name: "albedo", vec3: cola },
 						{name: "lightCol", vec3: colL},
-						{ name: "metallic", float: 0.0 },
-						{ name: "roughness", float: 0.1 },
-						{ name: "ao", float: 1.0 },
+						{ name: "metallic", float: 0.0  },
+						{ name: "roughness", float: 0.0},
+						{ name: "ao",float: 1.0 },
 					],
 					bind_textures: [
 						{name: "albedoMap", file: "rustedironDiffuse.png"},
@@ -180,7 +181,7 @@ class Main {
 		var o:TObj = {
 			name: "Object",
 			type: "mesh_object",
-			data_ref: "Teapot.arm/teapot",
+			data_ref: "SSphere.arm/Sphere",
 			material_refs: ["MyMaterial"],
 			transform: null,
 		};
@@ -218,12 +219,14 @@ class Main {
 		t.rot.fromTo(new Vec4(0, 0, 1), new Vec4(0, -1, 0));
 		t.buildMatrix();
 
-		var l = Scene.active.getChild("Light").transform;//Set light location on init
-		l.loc.set(2.6, 0.0, 5.9);
-		l.buildMatrix();
+		//var l = Scene.active.getChild("Light").transform;//Set light location on init
+		//l.loc.set(2.6, 0.0, 5.9);//2.6, 0.0, 5.9
+		//l.buildMatrix();
 
 		var object = Scene.active.getChild("Object");//set rotation of object to be appear straight(case in object like standford bunny/Utah teapot)
-		object.transform.setRotation(1.570796, 0, 0);
+		object.transform.loc.set(0.0, 0.0, 0.0);
+		//object.transform.setRotation(1.570796, 0, 0);
+		object.transform.buildMatrix();
 
 		//update
 		App.notifyOnUpdate(update);
@@ -236,7 +239,7 @@ class Main {
 		//Rotate Object
 		var object = Scene.active.getChild("Object");
 
-		//object.transform.rotate(new Vec4(0, 0, 1.570796), 0.02);
+		object.transform.rotate(new Vec4(0, 0, 1.570796), 0.02);
 
 		//Camera Controller
 		var dir = new Vec4();

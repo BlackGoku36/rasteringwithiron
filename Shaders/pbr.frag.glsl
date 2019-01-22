@@ -2,7 +2,7 @@
 
 out vec4 FragColor;
 in vec2 TexCoords;
-in vec3 WorldPos;
+in vec3 FragPos;
 in vec3 Normal;
 
 
@@ -27,8 +27,8 @@ vec3 getNormalFromMap()
 {
     vec3 tangentNormal = texture(normalMap, TexCoords).xyz * 2.0 - 1.0;
 
-    vec3 Q1  = dFdx(WorldPos);
-    vec3 Q2  = dFdy(WorldPos);
+    vec3 Q1  = dFdx(FragPos);
+    vec3 Q2  = dFdy(FragPos);
     vec2 st1 = dFdx(TexCoords);
     vec2 st2 = dFdy(TexCoords);
 
@@ -80,15 +80,15 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
 // ----------------------------------------------------------------------------
-void main()
-{		
+void main(){
+    
     vec3 albedo     = pow(texture(albedoMap, TexCoords.xy).rgb, vec3(2.2));
-    float metallic  = texture(metallicMap, TexCoords).r;
-    float roughness = texture(roughnessMap, TexCoords).r;
-    float ao        = texture(aoMap, TexCoords).r;
+    float metallic  = texture(metallicMap, TexCoords.xy).r;
+    float roughness = texture(roughnessMap, TexCoords.xy).r;
+    float ao        = texture(aoMap, TexCoords.xy).r;
     
     vec3 N = getNormalFromMap();
-    vec3 V = normalize(cameraPos - WorldPos);
+    vec3 V = normalize(cameraPos - FragPos);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
@@ -99,9 +99,9 @@ void main()
     vec3 Lo = vec3(0.0);
         // calculate per-light radiance
 
-    vec3 L = normalize(lightPos - WorldPos);
+    vec3 L = normalize(lightPos - FragPos);
     vec3 H = normalize(V+L);
-    float distance = length(lightPos - WorldPos);
+    float distance = length(lightPos - FragPos);
     float attenuation = 1.0 / (distance * distance);
     vec3 radiance = lightCol * attenuation;
 

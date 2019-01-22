@@ -11,8 +11,8 @@ uniform vec3 cameraPos;
 
 const int levels = 2;
 const float scaleFactor = 1.0 / levels;
-vec3 kD = vec3(1.0, 1.0, 1.0);//1.0, 0.4, 0.1 for orange //0.45, 0.65, 1.0 ugly blue
-vec3 kA = vec3(0.1, 0.1, 0.2);
+vec3 kD = vec3(1.0, 1.0, 1.0);//1.0, 0.4, 0.1 for orange
+vec3 kA = vec3(0.1, 0.1, 0.1);
 
 vec3 toonShade(){
 	vec3 n = normalize(Normal);

@@ -24,7 +24,7 @@ class Main {
 			path.drawMeshes("mesh");
 		};
 		RenderPath.setActive(path);
-
+    
 		//Set Scene from Scene json file
 		iron.Scene.setActive("ScenePBR.json", function(object:iron.object.Object) {
 			sceneReady();

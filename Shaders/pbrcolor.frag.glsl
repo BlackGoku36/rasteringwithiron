@@ -6,9 +6,9 @@ in vec3 Normal;
 
 // material parameters
 uniform vec3 albedo;
-uniform float metallic;
-uniform float roughness;
-uniform float ao;
+float metallic = 0.1;
+float roughness = 1.0;
+float ao = 1.0;
 
 // lights
 uniform vec3 lightPos;
@@ -56,8 +56,8 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0){
     return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
 // ----------------------------------------------------------------------------
+void main(){
 
-void main(){		
     vec3 N = normalize(Normal);
     vec3 V = normalize(cameraPos - FragPos);
 

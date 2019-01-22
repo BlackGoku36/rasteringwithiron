@@ -6,6 +6,8 @@ in vec3 Pos;
 out vec4 FragColor;
 uniform vec3 lightPos;
 uniform vec3 lightCol;
+uniform vec3 lightDir;
+uniform vec3 cameraPos;
 
 uniform int levels;
 uniform vec3 diffusec;

@@ -6,16 +6,8 @@
 					"compare_mode": "less",
 					"constants": [
 						{ 
-							"name": "color", 
-							"type": "vec3" 
-						},
-						{ 
 							"name": "albedo", 
 							"type": "vec3" 
-						},
-						{ 
-							"name": "lightCol", 
-							"type": "vec3"
 						},
 						{ 
 							"name": "metallic", 
@@ -49,11 +41,7 @@
 							"name": "lightCol",
 							"type": "vec3"
 						},
-						{
-							"link": "_lightDirection",
-							"name": "lightDir",
-							"type": "vec3"
-						},
+
 						{
 							"link": "_lightPosition",
 							"name": "lightPos",
@@ -62,11 +50,6 @@
 						{
 							"link": "_cameraPosition",
 							"name": "cameraPos",
-							"type": "vec3"
-						},
-						{
-							"link": "_cameraLook",
-							"name": "cameraDir",
 							"type": "vec3"
 						}
 					],

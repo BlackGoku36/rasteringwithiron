@@ -21,30 +21,27 @@
                             "link": "_viewMatrix" 
                         },
                         {
-							"link": "_lightColor",
+							"link": "_pointColor",
 							"name": "lightCol",
 							"type": "vec3"
 						},
 						{
-							"link": "_lightDirection",
-							"name": "lightDir",
-							"type": "vec3"
-						},
-						{
-							"link": "_lightPosition",
+							"link": "_pointPosition",
 							"name": "lightPos",
 							"type": "vec3"
 						},
-						{
-							"link": "_cameraPosition",
-							"name": "cameraPos",
-							"type": "vec3"
-						},
-						{
-							"link": "_cameraLook",
-							"name": "cameraDir",
-							"type": "vec3"
-						}
+                        {
+                            "name":"diffusec",
+                            "type":"vec3"
+                        },
+                        {
+                            "name":"ao",
+                            "type":"vec3"
+                        },
+                        {
+                            "name":"levels",
+                            "type":"int"
+                        }
                     ],
                     "cull_mode": "clockwise",
                     "depth_write": true,

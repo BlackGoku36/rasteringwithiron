@@ -3,7 +3,7 @@
         {
             "clear_color": [0.05, 0.05, 0.05, 1.0],
             "far_plane": 100.0,
-            "fov": 0.39,
+            "fov": 0.85,
             "frustum_culling": true,
             "name": "Camera",
             "near_plane": 0.1
@@ -25,7 +25,20 @@
         {
             "contexts": [
                 {
-                    "bind_constants": [],
+                    "bind_constants": [
+                        {
+                            "name": "diffusec",
+                            "vec3": [1.0, 1.0, 1.0]
+                        },
+                        {
+                            "name": "ao",
+                            "vec3": [0.1, 0.1, 0.1]
+                        },
+                        {
+                            "name": "levels",
+                            "int": 2
+                        }
+                    ],
                     "bind_textures": [],
                     "name": "mesh"
                 }
@@ -38,7 +51,7 @@
     "name": "SceneToon.json",
     "objects": [
         {
-            "data_ref": "Sbunny.arm/bunny",
+            "data_ref": "Teapot.arm/teapot",
             "dimensions": [1.0, 1.0, 1.0],
             "material_refs": ["Material"],
             "mobile": false,

@@ -26,11 +26,6 @@
 							"type": "vec3"
 						},
 						{
-							"link": "_lightDirection",
-							"name": "lightDir",
-							"type": "vec3"
-						},
-						{
 							"link": "_lightPosition",
 							"name": "lightPos",
 							"type": "vec3"
@@ -38,11 +33,6 @@
 						{
 							"link": "_cameraPosition",
 							"name": "cameraPos",
-							"type": "vec3"
-						},
-						{
-							"link": "_cameraLook",
-							"name": "cameraDir",
 							"type": "vec3"
 						}
 					],

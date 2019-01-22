@@ -3,7 +3,7 @@
         {
             "clear_color": [0.05, 0.05, 0.05, 1.0],
             "far_plane": 100.0,
-            "fov": 0.39,
+            "fov": 0.85,
             "frustum_culling": true,
             "name": "Camera",
             "near_plane": 0.1
@@ -14,8 +14,8 @@
 		{
             "name": "LightData",
             "type": "point",
-            "color": [1.0, 1.0, 1.0],
-            "strength": 20.0,
+            "color": [10.0, 10.0, 10.0],
+            "strength": 10.0,
             "near_plane": 0.1,
             "far_plane": 50.0,
             "fov": 0.85
@@ -28,19 +28,15 @@
 					"bind_constants": [
 						{ 
                             "name": "albedo", 
-                            "vec3": [0.5, 0.2, 0.0] 
-                        },
-						{
-                            "name": "lightCol", 
                             "vec3": [1.0, 1.0, 1.0] 
                         },
 						{ 
                             "name": "metallic",
-                            "float": 0.1 
+                            "float": 0.0 
                         },
 						{ 
                             "name": "roughness", 
-                            "float": 1.0 
+                            "float": 0.0 
                         },
 						{
                             "name": "ao",
@@ -59,7 +55,7 @@
     "name": "ScenePBRCol.json",
 	"objects" :[
 		{
-            "data_ref": "Sbunny.arm/bunny",
+            "data_ref": "SSphere.arm/Sphere",
             "dimensions": [1.0, 1.0, 1.0],
             "material_refs": ["Material"],
             "mobile": false,

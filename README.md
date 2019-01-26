@@ -47,10 +47,10 @@ There are 3 Scene:
 
 # Showcase
 PBR Texture:
-![PBR with textures](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBRTex.png)
+![PBR with textures](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBRTexure.png)
 
 PBR Material:
-![PBR Material](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBRCol.png)
+![PBR Material](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBRColor.png)
 
 Toon Shading:
-![Toon Shader](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/Toon.png)
+![Toon Shader](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/ToonShader.png)

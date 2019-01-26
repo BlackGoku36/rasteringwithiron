@@ -6,17 +6,15 @@ in vec3 Normal;
 
 // material parameters
 uniform vec3 albedo;
-float metallic = 0.1;
-float roughness = 1.0;
-float ao = 1.0;
+uniform float metallic;
+uniform float roughness;
+uniform float ao;
 
 // lights
 uniform vec3 lightPos;
-uniform vec3 lightDir;
 uniform vec3 lightCol;
 
 uniform vec3 cameraPos;
-uniform vec3 cameraDir;
 
 const float PI = 3.14159265359;
 // ----------------------------------------------------------------------------
@@ -93,7 +91,7 @@ void main(){
     vec3 ambient = vec3(0.03) * albedo * ao;
     vec3 color = ambient + Lo;
 	
-    //color = color / (color + vec3(1.0));
+    color = color / (color + vec3(1.0));
     color = pow(color, vec3(1.0/2.2));  
    
     FragColor = vec4(color, 1.0);

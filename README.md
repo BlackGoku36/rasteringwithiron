@@ -2,8 +2,19 @@
 Basic rasterizer written in Haxe with help of Iron Framework for learning purpose.
 
 # Features
-* PBR(need fixing).
+* PBR:
+	* Cook-Torrance Model.
+	* Diffuse Model: Lambertian.
+	* Fresnel Equation: Schlick.
+	* Microfacet Distribution: GGX.
+	* Geometry Attenuation: GGX-Smith.
+	* **To-Do**: IBL:
+		* **To-Do**: Diffuse Irradiance.
+		* **To-Do**: Specular Radiance.
+
 * Cel-Shade(little joke, need to do more).
+	* Steps based lighting.
+	* **To-Do**: Outline.
 
 # To-Do
 * Fully implement Old-School rendering model.
@@ -29,7 +40,17 @@ There are bunch of models to test with, Change this line ``data_ref:"Barel.arm/b
 Feel free to open Issue and Make PR.
 
 #Scene
-There are 3 Scene.
+There are 3 Scene:
 * `ScenePBR`- PBR with textures.
-* `ScenePBRCol`- PBR with materials (without textures).
+* `ScenePBRCol`- PBR Material.
 * `SceneToon`- Toon Shading.
+
+#Showcase
+PBR Texture:
+![PBR with textures](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBRTex.png)
+
+PBR Material:
+![PBR Material](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBRCol.png)
+
+Toon Shading:
+![Toon Shader](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/Toon.png)

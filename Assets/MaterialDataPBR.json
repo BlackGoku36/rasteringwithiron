@@ -34,6 +34,11 @@
 							"link": "_cameraPosition",
 							"name": "cameraPos",
 							"type": "vec3"
+						},
+                        {
+                            "link": "_posUnpack",
+                            "name": "posUnpack",
+							"type": "float"
 						}
 					],
 					"cull_mode": "clockwise",

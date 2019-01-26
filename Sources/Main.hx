@@ -11,7 +11,7 @@ import iron.math.Vec4;
 class Main {
 
 	public static function main() {
-		kha.System.start({title: "Empty", width: 1280, height: 720}, function(window:kha.Window) {
+		kha.System.start({title: "rasteringwithiron", width: 1920, height: 1080}, function(window:kha.Window) {
 			App.init(ready);
 		});
 	}
@@ -26,7 +26,7 @@ class Main {
 		RenderPath.setActive(path);
     
 		//Set Scene from Scene json file
-		iron.Scene.setActive("ScenePBR.json", function(object:iron.object.Object) {
+		iron.Scene.setActive("SceneToon.json", function(object:iron.object.Object) {
 			sceneReady();
 		});
 	}
@@ -40,11 +40,6 @@ class Main {
 		t.loc.set(0, -3, 0);
 		t.rot.fromTo(new Vec4(0, 0, 1), new Vec4(0, -1, 0));
 		t.buildMatrix();
-
-		//Set light location on init
-		var l = Scene.active.getChild("Light").transform;
-		l.loc.set(5.0, 0.0, 6.0);
-		l.buildMatrix();
 
 		//set rotation of object to be appear straight(case in object like standford bunny/Utah teapot)
 		var object = Scene.active.getChild("Object");
@@ -63,7 +58,7 @@ class Main {
 		//Rotate Object
 		var object = Scene.active.getChild("Object");
 
-		object.transform.rotate(new Vec4(0, 0, 1.570796), 0.02);
+		//object.transform.rotate(new Vec4(0, 0, 1.570796), 0.02);
 
 		//Camera Controller
 		var dir = new Vec4();

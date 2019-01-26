@@ -41,7 +41,12 @@
                         {
                             "name":"levels",
                             "type":"int"
-                        }
+                        },
+                        {
+                            "link": "_posUnpack",
+                            "name": "posUnpack",
+							"type": "float"
+						}
                     ],
                     "cull_mode": "clockwise",
                     "depth_write": true,

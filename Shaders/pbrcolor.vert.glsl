@@ -14,7 +14,6 @@ uniform mat4 W;
 uniform float posUnpack;
 
 void main(){
-    TexCoords = tex;
     FragPos = vec3(W*vec4(pos.xyz * posUnpack, 1.0));
     Normal = mat3(W) * vec3(nor.xy, pos.w);
     gl_Position = P*V*vec4(FragPos, 1.0);

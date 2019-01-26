@@ -18,7 +18,7 @@ float scaleFactor = 1.0 / levels;
 vec3 toonShade(){
 	vec3 s = normalize(lightPos - Pos);
 	float cosine = max(0.0, dot(s, Normal));
-	vec3 diffuse = diffusec * floor(cosine * levels) * scaleFactor;
+	vec3 diffuse = diffusec * ceil(cosine * levels) * scaleFactor;
 	return lightCol * (ao + diffuse);
 }
 

@@ -51,6 +51,11 @@
 							"link": "_cameraPosition",
 							"name": "cameraPos",
 							"type": "vec3"
+						},
+                        {
+                            "link": "_posUnpack",
+                            "name": "posUnpack",
+							"type": "float"
 						}
 					],
 					"cull_mode": "clockwise",
@@ -68,7 +73,7 @@
 							"name": "nor"
 						}
 					],
-					"vertex_shader": "pbr.vert"
+					"vertex_shader": "pbrcolor.vert"
 				}
 			],
 			"name": "MaterialData_PBRCol"

@@ -28,7 +28,7 @@ Basic rasterizer written in Haxe with help of Iron Framework for learning purpos
 * Mouse click to lock mouse.
 * Escape to unlock mouse.
 
-#Models
+# Models
 There are bunch of models to test with, Change this line ``data_ref:"Barel.arm/barel"`` where `Barel.arm` is arm file that has model and `barel` is model name, in Scene .json file, model are listed below, you can add your own!(Note: Make sure your model is uv-unwarped or else it will not show texture, but this isn't case in shader without texture).
 * `Suzanne.arm/Suzanne`(Suzanne)(Warning: No UV in this one).
 * `SBunny.arm/bunny`(Standford Rabbit).
@@ -39,13 +39,13 @@ There are bunch of models to test with, Change this line ``data_ref:"Barel.arm/b
 
 Feel free to open Issue and Make PR.
 
-#Scene
+# Scene
 There are 3 Scene:
 * `ScenePBR`- PBR with textures.
 * `ScenePBRCol`- PBR Material.
 * `SceneToon`- Toon Shading.
 
-#Showcase
+# Showcase
 PBR Texture:
 ![PBR with textures](https://blackgoku36.github.io/rasteringwithiron/Demo/Assets/PBRTex.png)
 

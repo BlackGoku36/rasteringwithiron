@@ -4,7 +4,7 @@
             "clear_color": [0.05, 0.05, 0.05, 1.0],
             "far_plane": 100.0,
             "fov": 0.85,
-            "frustum_culling": true,
+            "frustum_culling": false,
             "name": "Camera",
             "near_plane": 0.1
         }
@@ -59,19 +59,29 @@
     "name": "ScenePBR.json",
     "objects": [
         {
-            "data_ref": "SSphere/Sphere",
+            "data_ref": "SSphere.arm/Sphere",
             "dimensions": [1.0, 1.0, 1.0],
             "material_refs": ["Material"],
             "mobile": false,
             "name": "Object",
-            "traits": [],
+            "traits": [
+                {
+                    "class_name":"arm.RotateObject",
+                    "type":"Script"
+                }
+            ],
             "transform": null,
             "type": "mesh_object"
         },
         {
             "data_ref": "Camera",
             "name": "Camera",
-            "traits": [],
+            "traits": [
+                {
+                    "class_name":"arm.CameraController",
+                    "type":"Script"
+                }
+            ],
             "transform": null,
             "type": "camera_object"
         },
